@@ -33,14 +33,18 @@ def get_profile(id, pwd) :
     driver.find_element_by_name('user.usr_id').send_keys(id)
     driver.find_element_by_name('user.passwd').send_keys(pwd)
     driver.find_element_by_id('loginBtn').click()
-    driver.get('http://my.knu.ac.kr/stpo/stpo/stud/infoMngt/basisMngt/list.action')
-    profile = {'sname': '', 'sdept': '', 'smajor': ''}
-    profile['sname'] = driver.find_element_by_id('kor_nm').get_attribute('value')
-    stemp = str(driver.find_elements_by_tag_name('td')[4].text).split(' ')
-    profile['sdept'] = stemp[2]
-    profile['smajor'] = stemp[3]
-    return profile
-    print(profile)
+    try:
+        driver.get('http://my.knu.ac.kr/stpo/stpo/stud/infoMngt/basisMngt/list.action')
+        profile = {'sname': '', 'sdept': '', 'smajor': ''}
+        profile['sname'] = driver.find_element_by_id('kor_nm').get_attribute('value')
+        stemp = str(driver.find_elements_by_tag_name('td')[8].text).split(' ')
+        profile['sdept'] = stemp[2]
+        profile['smajor'] = stemp[3]
+        print(profile)
+        return profile
+    except:
+        print('로그인에 실패했습니다.')
+        return -1
 
 def get_major_lecture(profile):
     driver.get('http://my.knu.ac.kr/stpo/stpo/cour/listLectPln/list.action')
@@ -68,7 +72,6 @@ def get_major_lecture(profile):
         #print(Tuple) # 추가될 튜플 출력
         Tuple.clear()
     DataBase.SELECT_db()
-#GUI.init()
 
 '''
 여기서부터 해야할 내용
