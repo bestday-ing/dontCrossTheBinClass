@@ -1,58 +1,46 @@
 import sys
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtSlot
+
+app = QtWidgets.QApplication(sys.argv)
+
+class Dialog(QtWidgets.QDialog):
+    def __init__(self, dinput):
+        super(Dialog, self).__init__()
+        self.createFormGroupBox(dinput)
+
+        buttonBox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+        status = QtWidgets.QLabel('아이디와 비밀번호를 입력해주세요')
+
+        mainLayout = QtWidgets.QVBoxLayout(self)
+        mainLayout.addWidget(status)
+        mainLayout.addWidget(self.formGroupBox)
+        mainLayout.addWidget(buttonBox)
+        self.setWindowTitle("GUI TEST") # 공백으로 수정
+
+    def createFormGroupBox(self, dinput):
+        layout = QtWidgets.QFormLayout()
+        self.input_id = QtWidgets.QLineEdit('')
+        self.input_pwd = QtWidgets.QLineEdit('')
+        self.input_pwd.setEchoMode(QLineEdit.Password)
+
+        # self.combox1 = QtWidgets.QComboBox()
+        # self.combox1.setToolTip('Hello')
+        # self.combox1.addItems(['India','France','UK','USA','Germany'])
+        # self.spinbox1 = QtWidgets.QSpinBox()
+
+        for text, w in zip(dinput, (self.input_id, self.input_pwd)):
+            layout.addRow(text, w)
 
 
+        self.formGroupBox = QtWidgets.QGroupBox("통합정보시스템 로그인")
+        self.formGroupBox.setLayout(layout)
 
-class App(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.title = 'PyQt GUI'
-        self.left = 100
-        self.top = 100
-        self.width = 300
-        self.height = 200
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
+    def accept(self):
+        self._output = self.input_id.text(), self.input_pwd.text()
+        super(Dialog, self).accept()
 
-        self.table_widget = MyTableWidget(self)
-        self.setCentralWidget(self.table_widget)
-
-        self.show()
-
-class MyTableWidget(QWidget):
-    def __init__(self, parent):
-        super(QWidget, self).__init__(parent)
-        self.layout = QVBoxLayout(self)
-
-        #탭 스크린 설정
-        self.tabs = QTabWidget()
-        self.tab1 = QWidget()
-        self.tab2 = QWidget()
-        self.tabs.resize(300, 200)
-
-        #탭 추가
-        self.tabs.addTab(self.tab1, "Tab 1")
-        self.tabs.addTab(self.tab2, "Tab 2")
-
-        # 첫번째 탬 레이아웃 설정
-        self.tab1.layout = QVBoxLayout(self)
-        self.pushButton1 = QPushButton("PyQt5 button")
-        self.tab1.layout.addWidget(self.pushButton1)
-        self.tab1.setLayout(self.tab1.layout)
-
-        # 그리고 위젯에 탭 추가
-        self.layout.addWidget(self.tabs)
-        self.setLayout(self.layout)
-
-    @pyqtSlot()
-    def on_click(self):
-        print('\n')
-        for currentQTableWidgetItem in self.tableWidget.selectedItems():
-            print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = App()
-    ex.show()
-    app.exec_()
+    def get_output(self):
+        return self._output
