@@ -1,19 +1,21 @@
 import Crawl
 import sys
-import GUI
+from PSH_GUI import main_gui
+
+gui = main_gui.Init()
 
 # Staring Functions for Execution
-dinput = ['아이디', '비밀번호']
-# Call the UI and get the inputs
-dialog = GUI.Dialog(dinput)
-if dialog.exec_() == GUI.Dialog.Accepted:
-    KNU_id, KNU_pwd = dialog.get_output()
-    print(KNU_id, KNU_pwd) # 비밀번호 콘솔에 그대로 출력 안되게
+# dinput = ['아이디', '비밀번호']
+# # Call the UI and get the inputs
+# dialog = login_popup.Dialog(dinput)
+# if dialog.exec_() == login_popup.Dialog.Accepted:
+#     KNU_id, KNU_pwd = dialog.get_output()
+#     print(KNU_id, KNU_pwd) # 비밀번호 콘솔에 그대로 출력 안되게
+#
+# User_Profile = Crawl.get_profile(KNU_id, KNU_pwd)  # 통합정보시스템 아이디 비밀번호 입력
 
-User_Profile = Crawl.get_profile(KNU_id, KNU_pwd)  # 통합정보시스템 아이디 비밀번호 입력
-
-if (User_Profile != -1):
-    Crawl.get_major_lecture(User_Profile)
+#if (User_Profile != -1):
+#    Crawl.get_major_lecture(User_Profile)
 
 Crawl.driver.quit()
 

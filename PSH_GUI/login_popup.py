@@ -2,8 +2,6 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 
-app = QtWidgets.QApplication(sys.argv)
-
 class Dialog(QtWidgets.QDialog):
     def __init__(self, dinput):
         super(Dialog, self).__init__()
@@ -44,3 +42,8 @@ class Dialog(QtWidgets.QDialog):
 
     def get_output(self):
         return self._output
+
+def init():
+    login = QtWidgets.QApplication(sys.argv)
+    w = Dialog()
+    login.exec_()
