@@ -1,6 +1,8 @@
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
+import Crawl
+
 
 class Dialog(QtWidgets.QDialog):
     def __init__(self, dinput):
@@ -37,8 +39,14 @@ class Dialog(QtWidgets.QDialog):
         self.formGroupBox.setLayout(layout)
 
     def accept(self):
-        self._output = self.input_id.text(), self.input_pwd.text()
-        super(Dialog, self).accept()
+        ID = self.input_id.text()
+        PWD = self.input_pwd.text()
+        profile = Crawl.get_profile(ID, PWD)
+        if(profile==False):
+            QMessageBox.information(self, "Error", "로그인 실패!")
+        else:
+            #Crawl.get_major_lecture(profile)
+            #크롤링 수행
 
     def get_output(self):
         return self._output

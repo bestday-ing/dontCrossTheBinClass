@@ -9,7 +9,7 @@ macProDriverPath = '/Users/yubin/ChromeDriver/chromedriver'
 windowDriverPath = 'C:\Python\chromedriver'
 chrome_option = webdriver.ChromeOptions()
 chrome_option.add_argument("--window-size=1280,720")  # 윈도우 사이즈 조절해서 모든 column 로드
-driver = webdriver.Chrome( macProDriverPath , chrome_options=chrome_option)  # 크롬 드라이버 불러오기
+driver = webdriver.Chrome( windowDriverPath , chrome_options=chrome_option)  # 크롬 드라이버 불러오기
 driver.implicitly_wait(3)
 
 '''
@@ -42,11 +42,11 @@ def get_profile(id, pwd) :
         stemp = str(driver.find_elements_by_tag_name('td')[8].text).split(' ')
         profile['sdept'] = stemp[2]
         profile['smajor'] = stemp[3]
-        print(profile)
         return profile
     except:
-        print('로그인에 실패했습니다.')
-        return -1
+        alert = driver.switch_to_alert()  # alert 창으로 전환
+        alert.accept()
+        return False
 
 def get_major_lecture(profile):
     driver.get('http://my.knu.ac.kr/stpo/stpo/cour/listLectPln/list.action')
