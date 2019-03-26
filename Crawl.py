@@ -5,9 +5,11 @@ import DataBase
 import time
 
 #def driver_init() :
+macProDriverPath = '/Users/yubin/ChromeDriver/chromedriver'
+windowDriverPath = 'C:\Python\chromedriver'
 chrome_option = webdriver.ChromeOptions()
 chrome_option.add_argument("--window-size=1280,720")  # 윈도우 사이즈 조절해서 모든 column 로드
-driver = webdriver.Chrome('C:\Python\chromedriver', chrome_options=chrome_option)  # 크롬 드라이버 불러오기
+driver = webdriver.Chrome( windowDriverPath , chrome_options=chrome_option)  # 크롬 드라이버 불러오기
 driver.implicitly_wait(3)
 
 '''
