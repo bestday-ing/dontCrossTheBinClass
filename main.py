@@ -1,4 +1,4 @@
-import Crawl
+#import Crawl
 import sys
 from PSH_GUI import main_gui
 
@@ -17,7 +17,7 @@ gui = main_gui.Init()
 #if (User_Profile != -1):
 #    Crawl.get_major_lecture(User_Profile)
 
-Crawl.driver.quit()
+#Crawl.driver.quit()
 
 # 1. my.knu.ac.kr에서 유저 프로필 가져오기
 #KNU_id = input('통합정보시스템 아이디 입력 : ')

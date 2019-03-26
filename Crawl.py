@@ -43,10 +43,12 @@ def get_profile(id, pwd) :
         profile['sdept'] = stemp[2]
         profile['smajor'] = stemp[3]
         print(profile)
-        return profile
+        return profile                      # 로그인 성공 시, 프로필 반환
     except:
+        alert = driver.switch_to_alert()    # alert 창으로 전환
+        alert.accept()                      # 확인
         print('로그인에 실패했습니다.')
-        return -1
+        return -1                           # 로그인 실패 시, -1 반환
 
 def get_major_lecture(profile):
     driver.get('http://my.knu.ac.kr/stpo/stpo/cour/listLectPln/list.action')
