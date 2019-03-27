@@ -1,8 +1,38 @@
 import Crawl
 from PyQt5 import QtCore, QtGui, QtWidgets
-import login_popup
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QPoint, Qt
+from Bin import login_popup
 
-class Ui_Dialog(object):
+class Ui_Dialog(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        self.setFixedSize(self.size())  # 창 크기 고정
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # 윈도우 레이아웃 제거
+        print('3')
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+    def mousePressEvent(self, event):
+        self.oldPos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        delta = QPoint(event.globalPos() - self.oldPos)
+        # print(delta)
+        self.move(self.x() + delta.x(), self.y() + delta.y())
+        self.oldPos = event.globalPos()
+
+    # ESC로 윈도우 종료 이벤트
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            print('ESC Pressed : close app')
+            self.close()
+
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(959, 591)
@@ -157,7 +187,6 @@ class Ui_Dialog(object):
 
         self.pushBt_update.clicked.connect(updateBt_pushed)
         #########################################################
-
         #########################################################
         def loginBt_pushed():
             print("Login Btn pressed")
@@ -173,6 +202,22 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+    # def center(self):
+    #     qr = self.frameGeometry()
+    #     cp = QtWidgets.QDesktopWidget().availableGeometry().center()
+    #     qr.moveCenter(cp)
+    #     self.move(qr.topLeft())
+    #
+    # def mousePressEvent(self, event):
+    #     self.oldPos = QtWidgets.event.globalPos()
+    #
+    # def mouseMoveEvent(self, event):
+    #     delta = QtCore.QPoint(event.globalPos() - self.oldPos)
+    #     # print(delta)
+    #     self.move(self.x() + delta.x(), self.y() + delta.y())
+    #     self.oldPos = event.globalPos()
+
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate

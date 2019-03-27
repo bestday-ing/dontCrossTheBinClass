@@ -45,6 +45,7 @@ class Dialog(QtWidgets.QDialog):
         if(profile==False):
             QMessageBox.information(self, "Error", "로그인 실패!")
         else:
+            print('ss')
             #Crawl.get_major_lecture(profile)
             #크롤링 수행
 
