@@ -2,7 +2,7 @@ import Crawl
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QPoint, Qt
-from Bin import login_popup
+import login_popup
 
 class Ui_Dialog(QMainWindow):
     def __init__(self):

@@ -1,6 +1,6 @@
 
 from PyQt5 import QtWidgets
-from Bin.GUI_main import Ui_Dialog
+from GUI_main import Ui_Dialog
 # from eventHandler import eventHandlerSet
 import sys
 
