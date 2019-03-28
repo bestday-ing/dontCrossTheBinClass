@@ -33,6 +33,16 @@ class Ui_Dialog(QMainWindow):
             print('ESC Pressed : close app')
             self.close()
 
+    def checkBoxState(self):
+        msg = "select * from Course where type = "
+        if self.ckBox_major.isChecked() == True:
+            msg += "'공학전공'"
+        if self.ckBox_Mbasic.isChecked() == True:
+            msg += "'전공기반'"
+        if self.ckBox_basis.isChecked() == True:
+            msg += "'기본소양'"
+        print(msg)
+
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(959, 591)
@@ -82,45 +92,49 @@ class Ui_Dialog(QMainWindow):
         self.label_5 = QtWidgets.QLabel(self.frame_2)
         self.label_5.setGeometry(QtCore.QRect(6, 53, 30, 20))
         self.label_5.setObjectName("label_5")
+
         self.label_6 = QtWidgets.QLabel(self.frame_2)
         self.label_6.setGeometry(QtCore.QRect(6, 29, 30, 20))
         self.label_6.setObjectName("label_6")
+
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.frame_2)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(40, 50, 231, 31))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.checkBox_8 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
-        self.checkBox_8.setObjectName("checkBox_8")
-        self.horizontalLayout.addWidget(self.checkBox_8)
-        self.checkBox_7 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
-        self.checkBox_7.setObjectName("checkBox_7")
-        self.horizontalLayout.addWidget(self.checkBox_7)
-        self.checkBox_6 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
-        self.checkBox_6.setObjectName("checkBox_6")
-        self.horizontalLayout.addWidget(self.checkBox_6)
-        self.checkBox_5 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
-        self.checkBox_5.setObjectName("checkBox_5")
-        self.horizontalLayout.addWidget(self.checkBox_5)
-        self.checkBox_4 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
-        self.checkBox_4.setObjectName("checkBox_4")
-        self.horizontalLayout.addWidget(self.checkBox_4)
+
+        self.ckBox_grdEtc = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
+        self.ckBox_grdEtc.setObjectName("checkBox_8")
+        self.horizontalLayout.addWidget(self.ckBox_grdEtc)
+        self.ckBox_grd1 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
+        self.ckBox_grd1.setObjectName("checkBox_7")
+        self.horizontalLayout.addWidget(self.ckBox_grd1)
+        self.ckBox_grd2 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
+        self.ckBox_grd2.setObjectName("checkBox_6")
+        self.horizontalLayout.addWidget(self.ckBox_grd2)
+        self.ckBox_grd3 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
+        self.ckBox_grd3.setObjectName("checkBox_5")
+        self.horizontalLayout.addWidget(self.ckBox_grd3)
+        self.ckBox_grd4 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
+        self.ckBox_grd4.setObjectName("checkBox_4")
+        self.horizontalLayout.addWidget(self.ckBox_grd4)
         self.horizontalLayoutWidget_2 = QtWidgets.QWidget(self.frame_2)
         self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(40, 75, 231, 31))
         self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.checkBox_3 = QtWidgets.QCheckBox(self.horizontalLayoutWidget_2)
-        self.checkBox_3.setObjectName("checkBox_3")
-        self.horizontalLayout_2.addWidget(self.checkBox_3)
-        self.checkBox_2 = QtWidgets.QCheckBox(self.horizontalLayoutWidget_2)
-        self.checkBox_2.setObjectName("checkBox_2")
-        self.horizontalLayout_2.addWidget(self.checkBox_2)
-        self.checkBox = QtWidgets.QCheckBox(self.horizontalLayoutWidget_2)
-        self.checkBox.setObjectName("checkBox")
-        self.horizontalLayout_2.addWidget(self.checkBox)
+        self.ckBox_major = QtWidgets.QCheckBox(self.horizontalLayoutWidget_2)
+        self.ckBox_major.setObjectName("checkBox_3")
+        self.horizontalLayout_2.addWidget(self.ckBox_major)
+        self.ckBox_Mbasic = QtWidgets.QCheckBox(self.horizontalLayoutWidget_2)
+        self.ckBox_Mbasic.setObjectName("checkBox_2")
+        self.horizontalLayout_2.addWidget(self.ckBox_Mbasic)
+        self.ckBox_basis = QtWidgets.QCheckBox(self.horizontalLayoutWidget_2)
+        self.ckBox_basis.setObjectName("checkBox")
+
+        self.horizontalLayout_2.addWidget(self.ckBox_basis)
         self.horizontalSlider = QtWidgets.QSlider(self.frame_2)
         self.horizontalSlider.setGeometry(QtCore.QRect(41, 28, 221, 22))
         self.horizontalSlider.setMaximumSize(QtCore.QSize(221, 16777215))
@@ -206,8 +220,17 @@ class Ui_Dialog(QMainWindow):
         self.pushBt_login.clicked.connect(loginBt_pushed)
         #########################################################
 
+        def searchBt_pushed():
+            print("Search Btn pressed")
+            # DB sql문 작성해서 넘길 건데 실시간이면 좀 더 생각을 하고 넘겨야 할 듯
+
+
+        self.pushBt_search.clicked.connect(searchBt_pushed)
+
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+
 
 
 
@@ -228,24 +251,44 @@ class Ui_Dialog(QMainWindow):
         item.setText(_translate("Dialog", "금"))
         item = self.tableWidget.horizontalHeaderItem(5)
         item.setText(_translate("Dialog", "토"))
+
+
+
         self.label.setText(_translate("Dialog", "Time Table"))
         self.label_3.setText(_translate("Dialog", "과목검색"))
         self.label_4.setText(_translate("Dialog", "구분"))
         self.label_5.setText(_translate("Dialog", "학년"))
         self.label_6.setText(_translate("Dialog", "학점"))
-        self.checkBox_8.setText(_translate("Dialog", "*"))
-        self.checkBox_7.setText(_translate("Dialog", "1"))
-        self.checkBox_6.setText(_translate("Dialog", "2"))
-        self.checkBox_5.setText(_translate("Dialog", "3"))
-        self.checkBox_4.setText(_translate("Dialog", "4"))
-        self.checkBox_3.setText(_translate("Dialog", "전공"))
-        self.checkBox_2.setText(_translate("Dialog", "전공기반"))
-        self.checkBox.setText(_translate("Dialog", "기본소양"))
+
+        self.ckBox_grdEtc.setText(_translate("Dialog", "*"))
+        self.ckBox_grd1.setText(_translate("Dialog", "1"))
+        self.ckBox_grd2.setText(_translate("Dialog", "2"))
+        self.ckBox_grd3.setText(_translate("Dialog", "3"))
+        self.ckBox_grd4.setText(_translate("Dialog", "4"))
+
+        self.ckBox_major.setText(_translate("Dialog", "전공"))
+        self.ckBox_Mbasic.setText(_translate("Dialog", "전공기반"))
+        self.ckBox_basis.setText(_translate("Dialog", "기본소양"))
+
+        # 체크 박스 리스너 마냥,, -- def checkBoxState로 처리
+        self.ckBox_major.stateChanged.connect(self.checkBoxState)
+        self.ckBox_basis.stateChanged.connect(self.checkBoxState)
+        self.ckBox_Mbasic.stateChanged.connect(self.checkBoxState)
+
+        self.ckBox_grdEtc.stateChanged.connect(self.checkBoxState)
+        self.ckBox_grd1.stateChanged.connect(self.checkBoxState)
+        self.ckBox_grd2.stateChanged.connect(self.checkBoxState)
+        self.ckBox_grd3.stateChanged.connect(self.checkBoxState)
+        self.ckBox_grd4.stateChanged.connect(self.checkBoxState)
+
+        ###
+
         self.comboBox.setItemText(0, _translate("Dialog", "교수명"))
         self.comboBox.setItemText(1, _translate("Dialog", "과목명"))
         self.comboBox.setItemText(2, _translate("Dialog", "과목코드"))
-        #시간 검색은 어떻게 하는 거지.??? 시간대 입력인건가????? 우리가 선택하게끔 하는 게 나을 것 같은데
-        self.pushBt_search.setText(_translate("Dialog", "Search"))
+        # 시간 검색은 어떻게 하는 거지.??? 시간대 입력인건가????? 우리가 선택하게끔 하는 게 나을 것 같은데
+
+        self.pushBt_search.setText(_translate("Dialog", "검색"))
         self.label_2.setText(_translate("Dialog", "졸업학점/ 이수학점"))
         self.pushBt_login.setText(_translate("Dialog", "로그인"))
         self.label_7.setText(_translate("Dialog", " 학점을 보기 위해서는 로그인이 필요합니다."))
