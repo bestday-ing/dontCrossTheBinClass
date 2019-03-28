@@ -143,14 +143,18 @@ class Ui_Dialog(QMainWindow):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
-        self.pushButton = QtWidgets.QPushButton(self.frame_2)
-        self.pushButton.setGeometry(QtCore.QRect(220, 130, 61, 23))
+
+        self.pushBt_search = QtWidgets.QPushButton(self.frame_2)
+        self.pushBt_search.setGeometry(QtCore.QRect(220, 130, 61, 23))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton.sizePolicy().hasHeightForWidth())
-        self.pushButton.setSizePolicy(sizePolicy)
-        self.pushButton.setObjectName("pushButton")
+        sizePolicy.setHeightForWidth(self.pushBt_search.sizePolicy().hasHeightForWidth())
+        self.pushBt_search.setSizePolicy(sizePolicy)
+        self.pushBt_search.setObjectName("pushBt_search")
+
+
+
         self.plainTextEdit = QtWidgets.QPlainTextEdit(self.frame_2)
         self.plainTextEdit.setGeometry(QtCore.QRect(60, 130, 161, 21))
         self.plainTextEdit.setAcceptDrops(True)
@@ -158,6 +162,7 @@ class Ui_Dialog(QMainWindow):
         self.plainTextEdit.setLineWidth(1)
         self.plainTextEdit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.plainTextEdit.setObjectName("plainTextEdit")
+
         self.frame_3 = QtWidgets.QFrame(Dialog)
         self.frame_3.setGeometry(QtCore.QRect(10, 470, 801, 80))
         self.frame_3.setFrameShape(QtWidgets.QFrame.Box)
@@ -167,15 +172,16 @@ class Ui_Dialog(QMainWindow):
         self.label_2 = QtWidgets.QLabel(self.frame_3)
         self.label_2.setGeometry(QtCore.QRect(20, 0, 771, 21))
         self.label_2.setObjectName("label_2")
+
         self.pushBt_login = QtWidgets.QPushButton(self.frame_3)
         self.pushBt_login.setGeometry(QtCore.QRect(320, 40, 111, 32))
         self.pushBt_login.setObjectName("pushButton_3")
+
         self.label_7 = QtWidgets.QLabel(self.frame_3)
         self.label_7.setGeometry(QtCore.QRect(260, 20, 231, 21))
         self.label_7.setObjectName("label_7")
-        self.pushBt_update = QtWidgets.QPushButton(Dialog)
-        self.pushBt_update.setGeometry(QtCore.QRect(810, 470, 121, 81))
-        self.pushBt_update.setObjectName("pushButton_2")
+
+
         #########
         self.pushBt_update = QtWidgets.QPushButton(Dialog)
         self.pushBt_update.setGeometry(QtCore.QRect(810, 470, 121, 81))
@@ -203,20 +209,8 @@ class Ui_Dialog(QMainWindow):
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    # def center(self):
-    #     qr = self.frameGeometry()
-    #     cp = QtWidgets.QDesktopWidget().availableGeometry().center()
-    #     qr.moveCenter(cp)
-    #     self.move(qr.topLeft())
-    #
-    # def mousePressEvent(self, event):
-    #     self.oldPos = QtWidgets.event.globalPos()
-    #
-    # def mouseMoveEvent(self, event):
-    #     delta = QtCore.QPoint(event.globalPos() - self.oldPos)
-    #     # print(delta)
-    #     self.move(self.x() + delta.x(), self.y() + delta.y())
-    #     self.oldPos = event.globalPos()
+
+
 
 
     def retranslateUi(self, Dialog):
@@ -247,10 +241,11 @@ class Ui_Dialog(QMainWindow):
         self.checkBox_3.setText(_translate("Dialog", "전공"))
         self.checkBox_2.setText(_translate("Dialog", "전공기반"))
         self.checkBox.setText(_translate("Dialog", "기본소양"))
-        self.comboBox.setItemText(0, _translate("Dialog", "1번"))
-        self.comboBox.setItemText(1, _translate("Dialog", "2번"))
-        self.comboBox.setItemText(2, _translate("Dialog", "3번"))
-        self.pushButton.setText(_translate("Dialog", "Search"))
+        self.comboBox.setItemText(0, _translate("Dialog", "교수명"))
+        self.comboBox.setItemText(1, _translate("Dialog", "과목명"))
+        self.comboBox.setItemText(2, _translate("Dialog", "과목코드"))
+        #시간 검색은 어떻게 하는 거지.??? 시간대 입력인건가????? 우리가 선택하게끔 하는 게 나을 것 같은데
+        self.pushBt_search.setText(_translate("Dialog", "Search"))
         self.label_2.setText(_translate("Dialog", "졸업학점/ 이수학점"))
         self.pushBt_login.setText(_translate("Dialog", "로그인"))
         self.label_7.setText(_translate("Dialog", " 학점을 보기 위해서는 로그인이 필요합니다."))
