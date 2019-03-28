@@ -1,8 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import DataBase
-#import GUI
-import time
 
 #def driver_init() :
 macProDriverPath = '/Users/yubin/ChromeDriver/chromedriver'
