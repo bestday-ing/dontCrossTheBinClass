@@ -1,4 +1,4 @@
-import Crawl
+from Crawl import Crawler
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QPoint, Qt
@@ -189,7 +189,7 @@ class Ui_Dialog(QMainWindow):
         #event handler 설치 : 상응하는 버튼에 설치 모듈화 하기 전 테스트로 여기 배치 나중에 다르게 빼도 괜찮음
         def updateBt_pushed():
             print("Update Btn pressed")
-            Crawl.driver.quit()
+            #Crawl.driver.quit()
 
         self.pushBt_update.clicked.connect(updateBt_pushed)
         #########################################################
@@ -200,8 +200,10 @@ class Ui_Dialog(QMainWindow):
             # Call the UI and get the inputs
             dialog = login_popup.Dialog(dinput)
             if dialog.exec_() == login_popup.Dialog.Accepted:
-                KNU_id, KNU_pwd = dialog.get_output()
-                print(KNU_id, KNU_pwd)  # 비밀번호 콘솔에 그대로 출력 안되게
+                profile = dialog.get_output()
+                print(profile)
+                #KNU_id, KNU_pwd = dialog.get_output()
+                #print(KNU_id, KNU_pwd)  # 비밀번호 콘솔에 그대로 출력 안되게
 
         self.pushBt_login.clicked.connect(loginBt_pushed)
         #########################################################
@@ -249,6 +251,7 @@ class Ui_Dialog(QMainWindow):
         self.label_2.setText(_translate("Dialog", "졸업학점/ 이수학점"))
         self.pushBt_login.setText(_translate("Dialog", "로그인"))
         self.label_7.setText(_translate("Dialog", " 학점을 보기 위해서는 로그인이 필요합니다."))
+        self.label_7.resize(self.label_7.sizeHint())        # 라벨 내용만큼 자동 리사이징
         self.pushBt_update.setText(_translate("Dialog", "UPDATE"))
 
 

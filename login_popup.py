@@ -1,8 +1,7 @@
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
-import Crawl
-
+from Crawl import Crawler
 
 class Dialog(QtWidgets.QDialog):
     def __init__(self, dinput):
@@ -12,10 +11,10 @@ class Dialog(QtWidgets.QDialog):
         buttonBox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
-        status = QtWidgets.QLabel('아이디와 비밀번호를 입력해주세요')
+        self.status = QtWidgets.QLabel('아이디와 비밀번호를 입력해주세요')
 
         mainLayout = QtWidgets.QVBoxLayout(self)
-        mainLayout.addWidget(status)
+        mainLayout.addWidget(self.status)
         mainLayout.addWidget(self.formGroupBox)
         mainLayout.addWidget(buttonBox)
         self.setWindowTitle("GUI TEST") # 공백으로 수정
@@ -34,23 +33,27 @@ class Dialog(QtWidgets.QDialog):
         for text, w in zip(dinput, (self.input_id, self.input_pwd)):
             layout.addRow(text, w)
 
-
         self.formGroupBox = QtWidgets.QGroupBox("통합정보시스템 로그인")
         self.formGroupBox.setLayout(layout)
 
     def accept(self):
+        self.status.setText('로그인 중입니다...')
+        QApplication.processEvents()        # GUI 업데이트 함수
+        self.Crawl = Crawler()              # 크롬 드라이버 오브젝트 생성 및 브라우저 로드
         ID = self.input_id.text()
         PWD = self.input_pwd.text()
-        profile = Crawl.get_profile(ID, PWD)
-        if(profile==False):
+        self.profile = self.Crawl.get_profile(ID, PWD)      # 입력 값으로 로그인 시도
+        if(self.profile==False): # 로그인 실패시,
+            self.status.setText('아이디와 비밀번호를 확인해주세요.')
+            QApplication.processEvents()
             QMessageBox.information(self, "Error", "로그인 실패!")
-        else:
-            print('ss')
-            #Crawl.get_major_lecture(profile)
-            #크롤링 수행
+        else:                   # 로그인 성공시,
+            print('로그인 성공!')
+            super(Dialog, self).accept()        # 로그인 성공시 return value를 위해 super 클래스 호출
 
     def get_output(self):
-        return self._output
+        self.Crawl.close()      # 크롬 드라이버 종료
+        return self.profile     # User profile에 대한 정보 return
 
 def init():
     login = QtWidgets.QApplication(sys.argv)
