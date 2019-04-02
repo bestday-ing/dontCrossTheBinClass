@@ -43,6 +43,10 @@ class Ui_Dialog(QMainWindow):
             msg += "'기본소양'"
         print(msg)
 
+    def MoveSlider(self):
+        size = self.GradeSlider.value()
+        print(size)
+
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(959, 591)
@@ -135,17 +139,17 @@ class Ui_Dialog(QMainWindow):
         self.ckBox_basis.setObjectName("checkBox")
 
         self.horizontalLayout_2.addWidget(self.ckBox_basis)
-        self.horizontalSlider = QtWidgets.QSlider(self.frame_2)
-        self.horizontalSlider.setGeometry(QtCore.QRect(41, 28, 221, 22))
-        self.horizontalSlider.setMaximumSize(QtCore.QSize(221, 16777215))
-        self.horizontalSlider.setMinimum(1)
-        self.horizontalSlider.setMaximum(6)
-        self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
-        self.horizontalSlider.setInvertedAppearance(False)
-        self.horizontalSlider.setInvertedControls(False)
-        self.horizontalSlider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
-        self.horizontalSlider.setTickInterval(0)
-        self.horizontalSlider.setObjectName("horizontalSlider")
+        self.GradeSlider = QtWidgets.QSlider(self.frame_2)
+        self.GradeSlider.setGeometry(QtCore.QRect(41, 28, 221, 22))
+        self.GradeSlider.setMaximumSize(QtCore.QSize(221, 16777215))
+        self.GradeSlider.setMinimum(1)
+        self.GradeSlider.setMaximum(6)
+        self.GradeSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.GradeSlider.setInvertedAppearance(False)
+        self.GradeSlider.setInvertedControls(False)
+        self.GradeSlider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
+        self.GradeSlider.setTickInterval(0)
+        self.GradeSlider.setObjectName("GradeSlider")
         self.comboBox = QtWidgets.QComboBox(self.frame_2)
         self.comboBox.setGeometry(QtCore.QRect(7, 131, 51, 21))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
@@ -209,6 +213,7 @@ class Ui_Dialog(QMainWindow):
         #########################################################
         #########################################################
         def loginBt_pushed():
+
             print("Login Btn pressed")
             dinput = ['아이디', '비밀번호']
             # Call the UI and get the inputs
@@ -280,6 +285,9 @@ class Ui_Dialog(QMainWindow):
         self.ckBox_grd2.stateChanged.connect(self.checkBoxState)
         self.ckBox_grd3.stateChanged.connect(self.checkBoxState)
         self.ckBox_grd4.stateChanged.connect(self.checkBoxState)
+
+        # 슬라이더 리스너
+        self.GradeSlider.valueChanged.connect(self.MoveSlider)
 
         ###
 
