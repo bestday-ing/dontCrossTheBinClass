@@ -1,7 +1,8 @@
 import Crawl
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QPoint, Qt
+from PyQt5.QtCore import QPoint, Qt ,pyqtSlot
+from PyQt5.QtGui import *
 import login_popup
 
 class Ui_Dialog(QMainWindow):
@@ -10,13 +11,15 @@ class Ui_Dialog(QMainWindow):
         self.setupUi(self)
         self.setFixedSize(self.size())  # 창 크기 고정
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # 윈도우 레이아웃 제거
-        print('3')
 
     def center(self):
         qr = self.frameGeometry()
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
+
+    def cell_clicked(self, row, column):
+        print("Row %d and Column %d was clicked" % (row, column)) #선택된 영역 row,col 받아오기
 
     def mousePressEvent(self, event):
         self.oldPos = event.globalPos()
@@ -30,7 +33,7 @@ class Ui_Dialog(QMainWindow):
     # ESC로 윈도우 종료 이벤트
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
-            print('ESC Pressed : close app')
+            #print('ESC Pressed : close app')   #종료되었습니다.
             self.close()
 
     def checkBoxState(self):
@@ -74,25 +77,34 @@ class Ui_Dialog(QMainWindow):
         self.tableWidget.setHorizontalHeaderItem(4, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(5, item)
+
+        self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.tableWidget.cellClicked.connect(self.cell_clicked)
+
         self.label = QtWidgets.QLabel(self.frame)
         self.label.setGeometry(QtCore.QRect(30, 0, 501, 41))
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
+
         self.frame_2 = QtWidgets.QFrame(Dialog)
         self.frame_2.setGeometry(QtCore.QRect(660, 10, 281, 451))
         self.frame_2.setFrameShape(QtWidgets.QFrame.Box)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
+
         self.listView = QtWidgets.QListView(self.frame_2)
         self.listView.setGeometry(QtCore.QRect(0, 160, 221, 281))
         self.listView.setObjectName("listView")
+
         self.label_3 = QtWidgets.QLabel(self.frame_2)
         self.label_3.setGeometry(QtCore.QRect(0, 0, 211, 31))
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
         self.label_3.setObjectName("label_3")
+
         self.label_4 = QtWidgets.QLabel(self.frame_2)
         self.label_4.setGeometry(QtCore.QRect(5, 80, 30, 20))
         self.label_4.setObjectName("label_4")
+
         self.label_5 = QtWidgets.QLabel(self.frame_2)
         self.label_5.setGeometry(QtCore.QRect(6, 53, 30, 20))
         self.label_5.setObjectName("label_5")
