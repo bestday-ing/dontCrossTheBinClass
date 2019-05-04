@@ -4,13 +4,23 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QPoint, Qt, pyqtSlot
 import login_popup
 
+creditCstate = [False]
+yearCstate = [False, False, False, False, False]  # * 1 2 3 4
+typeCstate = [False, False, False]  # 공학전공 전공기반 기본소양
+
+ClickedStateManager = [creditCstate, yearCstate, typeCstate, 0, 0, 0, 0]  # 맨 마지막 토탈 썸인데
+
+
+
 class Ui_Dialog(QMainWindow):
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setFixedSize(self.size())  # 창 크기 고정
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # 윈도우 레이아웃 제거
         self.profile = -1
+
 
     def center(self):
         qr = self.frameGeometry()
@@ -37,13 +47,35 @@ class Ui_Dialog(QMainWindow):
             self.close()
 
     def checkBoxState(self):
-        msg = "select * from Course where type = "
-        if self.ckBox_major.isChecked() == True:
-            msg += "'공학전공'"
-        if self.ckBox_Mbasic.isChecked() == True:
-            msg += "'전공기반'"
-        if self.ckBox_basis.isChecked() == True:
-            msg += "'기본소양'"
+        global ClickedStateManager
+        typeName = ["'공학전공'", "'전공기반'", "'기본소양'"]
+        msg = "select * from Course where "
+        if self.ckBox_major.isChecked():
+            typeCstate[0] = True
+        else:
+            typeCstate[0] = False
+
+        if self.ckBox_Mbasic.isChecked():
+            typeCstate[1] = True
+        else:
+            typeCstate[1] = False
+
+        if self.ckBox_basis.isChecked():
+            typeCstate[2] = True
+        else:
+            typeCstate[2] = False
+
+        orN = sum(typeCstate) - 1
+
+        msg += "("
+        for i in range (len(typeCstate)):
+            if typeCstate[i]:
+                msg += "type = " + typeName[i]
+                if orN > 0:
+                    msg += ' or '
+                    orN -= 1
+        msg += ");"
+
         print(msg)
 
     def MoveSlider(self):
@@ -328,6 +360,9 @@ class Ui_Dialog(QMainWindow):
         self.NeedLoginLabel.setText(_translate("Dialog", " 학점을 보기 위해서는 로그인이 필요합니다."))
         self.NeedLoginLabel.resize(self.NeedLoginLabel.sizeHint())        # 라벨 내용만큼 자동 리사이징
         self.UpdateButton.setText(_translate("Dialog", "강의\n업데이트"))
+
+        mType = [self.ckBox_major, self.ckBox_basis, self.ckBox_Mbasic]
+        mYear = [self.ckBox_grdEtc, self.ckBox_grd1, self.ckBox_grd2, self.ckBox_grd3, self.ckBox_grd4]
 
 
 
