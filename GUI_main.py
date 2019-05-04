@@ -77,10 +77,12 @@ class Ui_Dialog(QMainWindow):
         msg += ");"
 
         print(msg)
+        return msg
 
     def MoveSlider(self):
         size = self.GradeSlider.value()
         print(size)
+        return size
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -285,11 +287,19 @@ class Ui_Dialog(QMainWindow):
         #########################################################
         self.LoginButton.clicked.connect(self.loginBt_pushed)
         #########################################################
-
+        self.SearchButton.clicked.connect(self.searchBt_pushed)
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
 # event handler 설치 : 상응하는 버튼에 설치 모듈화 하기 전 테스트로 여기 배치 나중에 다르게 빼도 괜찮음
+    def searchBt_pushed(self):  # 검색창 입력
+        comboResult = self.SearchCombo.currentText()  # 콤보박스 입력값
+        searchResult = self.SearchTextEdit.toPlainText()  # 검색창 입력값
+        gubunResult = self.checkBoxState()  # 구분 체크박스 입력값
+        creditResult = self.MoveSlider()  # 학점 슬라이더 입력값
+        print("SearchButton Pushed\n교과구분 : " + comboResult + " 검색어 : " + searchResult)
+        print("구분 checkbox : " + gubunResult)
+        print("학점 선택 : " + str(creditResult))
 
     def loginBt_pushed(self):  # 로그인 팝업창
         print("Login Btn pressed")
