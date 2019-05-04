@@ -105,7 +105,7 @@ class Ui_Dialog(QMainWindow):
         timeslot = QtGui.QStandardItemModel()
         for f in testsubject:
             timeslot.appendRow(QtGui.QStandardItem(f))
-        self.subjectlist.setModel(timeslot)
+        self.Subjectlist.setModel(timeslot)
 
         self.SubSearchLabel = QtWidgets.QLabel(self.frame2) #과목검색 레이블
         self.SubSearchLabel.setGeometry(QtCore.QRect(0, 0, 211, 31))
