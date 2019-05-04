@@ -1,8 +1,7 @@
-import Crawl
+from Crawl import Crawler
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QPoint, Qt ,pyqtSlot
-from PyQt5.QtGui import *
+from PyQt5.QtCore import QPoint, Qt, pyqtSlot
 import login_popup
 
 class Ui_Dialog(QMainWindow):
@@ -11,6 +10,7 @@ class Ui_Dialog(QMainWindow):
         self.setupUi(self)
         self.setFixedSize(self.size())  # 창 크기 고정
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # 윈도우 레이아웃 제거
+        self.profile = -1
 
     def center(self):
         qr = self.frameGeometry()
@@ -19,7 +19,7 @@ class Ui_Dialog(QMainWindow):
         self.move(qr.topLeft())
 
     def cell_clicked(self, row, column):
-        print("Row %d and Column %d was clicked" % (row, column)) #선택된 영역 row,col 받아오기
+        print("Row %d and Column %d was clicked" % (row, column))  # 선택된 영역 row,col 받아오기
 
     def mousePressEvent(self, event):
         self.oldPos = event.globalPos()
@@ -33,7 +33,7 @@ class Ui_Dialog(QMainWindow):
     # ESC로 윈도우 종료 이벤트
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Escape:
-            #print('ESC Pressed : close app')   #종료되었습니다.
+            # print('ESC Pressed : close app')  # 종료 메세지 출력
             self.close()
 
     def checkBoxState(self):
@@ -78,6 +78,7 @@ class Ui_Dialog(QMainWindow):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(5, item)
 
+        # 셀 클릭시 row col 출력
         self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tableWidget.cellClicked.connect(self.cell_clicked)
 
@@ -85,34 +86,27 @@ class Ui_Dialog(QMainWindow):
         self.label.setGeometry(QtCore.QRect(30, 0, 501, 41))
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
-
         self.frame_2 = QtWidgets.QFrame(Dialog)
         self.frame_2.setGeometry(QtCore.QRect(660, 10, 281, 451))
         self.frame_2.setFrameShape(QtWidgets.QFrame.Box)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
-
         self.listView = QtWidgets.QListView(self.frame_2)
         self.listView.setGeometry(QtCore.QRect(0, 160, 221, 281))
         self.listView.setObjectName("listView")
-
         self.label_3 = QtWidgets.QLabel(self.frame_2)
         self.label_3.setGeometry(QtCore.QRect(0, 0, 211, 31))
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
         self.label_3.setObjectName("label_3")
-
         self.label_4 = QtWidgets.QLabel(self.frame_2)
         self.label_4.setGeometry(QtCore.QRect(5, 80, 30, 20))
         self.label_4.setObjectName("label_4")
-
         self.label_5 = QtWidgets.QLabel(self.frame_2)
         self.label_5.setGeometry(QtCore.QRect(6, 53, 30, 20))
         self.label_5.setObjectName("label_5")
-
         self.label_6 = QtWidgets.QLabel(self.frame_2)
         self.label_6.setGeometry(QtCore.QRect(6, 29, 30, 20))
         self.label_6.setObjectName("label_6")
-
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.frame_2)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(40, 50, 231, 31))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
@@ -135,6 +129,7 @@ class Ui_Dialog(QMainWindow):
         self.ckBox_grd4 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
         self.ckBox_grd4.setObjectName("checkBox_4")
         self.horizontalLayout.addWidget(self.ckBox_grd4)
+
         self.horizontalLayoutWidget_2 = QtWidgets.QWidget(self.frame_2)
         self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(40, 75, 231, 31))
         self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
@@ -173,7 +168,6 @@ class Ui_Dialog(QMainWindow):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
-
         self.pushBt_search = QtWidgets.QPushButton(self.frame_2)
         self.pushBt_search.setGeometry(QtCore.QRect(220, 130, 61, 23))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
@@ -182,9 +176,6 @@ class Ui_Dialog(QMainWindow):
         sizePolicy.setHeightForWidth(self.pushBt_search.sizePolicy().hasHeightForWidth())
         self.pushBt_search.setSizePolicy(sizePolicy)
         self.pushBt_search.setObjectName("pushBt_search")
-
-
-
         self.plainTextEdit = QtWidgets.QPlainTextEdit(self.frame_2)
         self.plainTextEdit.setGeometry(QtCore.QRect(60, 130, 161, 21))
         self.plainTextEdit.setAcceptDrops(True)
@@ -192,7 +183,6 @@ class Ui_Dialog(QMainWindow):
         self.plainTextEdit.setLineWidth(1)
         self.plainTextEdit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.plainTextEdit.setObjectName("plainTextEdit")
-
         self.frame_3 = QtWidgets.QFrame(Dialog)
         self.frame_3.setGeometry(QtCore.QRect(10, 470, 801, 80))
         self.frame_3.setFrameShape(QtWidgets.QFrame.Box)
@@ -202,56 +192,54 @@ class Ui_Dialog(QMainWindow):
         self.label_2 = QtWidgets.QLabel(self.frame_3)
         self.label_2.setGeometry(QtCore.QRect(20, 0, 771, 21))
         self.label_2.setObjectName("label_2")
-
         self.pushBt_login = QtWidgets.QPushButton(self.frame_3)
         self.pushBt_login.setGeometry(QtCore.QRect(320, 40, 111, 32))
         self.pushBt_login.setObjectName("pushButton_3")
-
         self.label_7 = QtWidgets.QLabel(self.frame_3)
         self.label_7.setGeometry(QtCore.QRect(260, 20, 231, 21))
         self.label_7.setObjectName("label_7")
-
-
-        #########
+        self.pushBt_update = QtWidgets.QPushButton(Dialog)
+        self.pushBt_update.setGeometry(QtCore.QRect(810, 470, 121, 81))
+        self.pushBt_update.setObjectName("pushButton_2")
+        #########|
         self.pushBt_update = QtWidgets.QPushButton(Dialog)
         self.pushBt_update.setGeometry(QtCore.QRect(810, 470, 121, 81))
         self.pushBt_update.setObjectName("pushBt_update") #update button
-        #event handler 설치 : 상응하는 버튼에 설치 모듈화 하기 전 테스트로 여기 배치 나중에 다르게 빼도 괜찮음
-        def updateBt_pushed():
-            print("Update Btn pressed")
-            Crawl.driver.quit()
+        #self.pushBt_update.setDisabled(True)
 
-        self.pushBt_update.clicked.connect(updateBt_pushed)
+
+        self.pushBt_update.clicked.connect(self.updateBt_pushed)
         #########################################################
         #########################################################
-        def loginBt_pushed():
 
-            print("Login Btn pressed")
-            dinput = ['아이디', '비밀번호']
-            # Call the UI and get the inputs
-            dialog = login_popup.Dialog(dinput)
-            if dialog.exec_() == login_popup.Dialog.Accepted:
-                KNU_id, KNU_pwd = dialog.get_output()
-                print(KNU_id, KNU_pwd)  # 비밀번호 콘솔에 그대로 출력 안되게
 
-        self.pushBt_login.clicked.connect(loginBt_pushed)
+        self.pushBt_login.clicked.connect(self.loginBt_pushed)
         #########################################################
-
-        def searchBt_pushed():
-            print("Search Btn pressed")
-            # DB sql문 작성해서 넘길 건데 실시간이면 좀 더 생각을 하고 넘겨야 할 듯
-
-
-        self.pushBt_search.clicked.connect(searchBt_pushed)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
+        # event handler 설치 : 상응하는 버튼에 설치 모듈화 하기 전 테스트로 여기 배치 나중에 다르게 빼도 괜찮음
 
+    def loginBt_pushed(self):  # 로그인 팝업창
+        print("Login Btn pressed")
+        dinput = ['아이디', '비밀번호']
+        # Call the UI and get the inputs
+        dialog = login_popup.Dialog(dinput)
+        if dialog.exec_() == login_popup.Dialog.Accepted:
+            self.profile = dialog.get_output()
+            print(self.profile)
+            self.label_7.setText(self.profile['sname'] + '님 환영합니다')
+            self.pushBt_login.hide()
 
-
-
-
+    def updateBt_pushed(self):
+        if (self.profile == -1):
+            QMessageBox.information(self, "Error", "로그인이 필요한 기능입니다")
+            # print('로그인 하지 않은 상태입니다.')
+        else:
+            crawl = Crawler()
+            crawl.get_major_lecture(self.profile)
+            crawl.close()
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -268,15 +256,11 @@ class Ui_Dialog(QMainWindow):
         item.setText(_translate("Dialog", "금"))
         item = self.tableWidget.horizontalHeaderItem(5)
         item.setText(_translate("Dialog", "토"))
-
-
-
         self.label.setText(_translate("Dialog", "Time Table"))
         self.label_3.setText(_translate("Dialog", "과목검색"))
         self.label_4.setText(_translate("Dialog", "구분"))
         self.label_5.setText(_translate("Dialog", "학년"))
         self.label_6.setText(_translate("Dialog", "학점"))
-
         self.ckBox_grdEtc.setText(_translate("Dialog", "*"))
         self.ckBox_grd1.setText(_translate("Dialog", "1"))
         self.ckBox_grd2.setText(_translate("Dialog", "2"))
@@ -301,18 +285,15 @@ class Ui_Dialog(QMainWindow):
         # 슬라이더 리스너
         self.GradeSlider.valueChanged.connect(self.MoveSlider)
 
-        ###
-
         self.comboBox.setItemText(0, _translate("Dialog", "교수명"))
         self.comboBox.setItemText(1, _translate("Dialog", "과목명"))
         self.comboBox.setItemText(2, _translate("Dialog", "과목코드"))
-        # 시간 검색은 어떻게 하는 거지.??? 시간대 입력인건가????? 우리가 선택하게끔 하는 게 나을 것 같은데
-
         self.pushBt_search.setText(_translate("Dialog", "검색"))
         self.label_2.setText(_translate("Dialog", "졸업학점/ 이수학점"))
         self.pushBt_login.setText(_translate("Dialog", "로그인"))
         self.label_7.setText(_translate("Dialog", " 학점을 보기 위해서는 로그인이 필요합니다."))
-        self.pushBt_update.setText(_translate("Dialog", "UPDATE"))
+        self.label_7.resize(self.label_7.sizeHint())        # 라벨 내용만큼 자동 리사이징
+        self.pushBt_update.setText(_translate("Dialog", "강의\n업데이트"))
 
 
 
