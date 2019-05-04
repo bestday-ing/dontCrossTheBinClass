@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import DataBase
+import platform
 
 class Crawler:
     def __init__(self):
@@ -10,7 +11,10 @@ class Crawler:
         chrome_option = webdriver.ChromeOptions()
         chrome_option.add_argument("--window-size=1280,720")  # 윈도우 사이즈 조절해서 모든 column 로드
         #chrome_option.add_argument("headless")                # 창 없는 크롬 모드
-        self.driver = webdriver.Chrome(windowDriverPath, chrome_options=chrome_option)  # 크롬 드라이버 불러오기
+        if(platform.system() == 'Windows'): #platform
+         self.driver = webdriver.Chrome(windowDriverPath, chrome_options=chrome_option)  # 윈도우 크롬 드라이버 불러오기
+        else:
+         self.driver = webdriver.Chrome(macProDriverPath, chrome_options=chrome_option)  # 맥 드라이버 불러오기
         self.driver.implicitly_wait(3)
 
     # select 태그에서 선택 1. select 클래스 이용
