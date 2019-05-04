@@ -29,7 +29,7 @@ class Ui_Dialog(QMainWindow):
         self.move(qr.topLeft())
 
     def cell_clicked(self, row, column):
-        print("Row %d and Column %d was clicked" % (row, column))  # 선택된 영역 row,col 받아오기
+        print("Row : %d | Column : %d" % (row, column))  # 선택된 영역 row,col 받아오기
 
     def mousePressEvent(self, event):
         self.oldPos = event.globalPos()
@@ -132,6 +132,12 @@ class Ui_Dialog(QMainWindow):
         self.Subjectlist = QtWidgets.QListView(self.frame2) #과목리스트 나오는 상자
         self.Subjectlist.setGeometry(QtCore.QRect(0, 160, 221, 281))
         self.Subjectlist.setObjectName("Subjectlist")
+
+        testsubject = ('새벽', '아침', '점심', '저녁', '밤')
+        timeslot = QtGui.QStandardItemModel()
+        for f in testsubject:
+            timeslot.appendRow(QtGui.QStandardItem(f))
+        self.Subjectlist.setModel(timeslot)
 
         self.SubSearchLabel = QtWidgets.QLabel(self.frame2) #과목검색 레이블
         self.SubSearchLabel.setGeometry(QtCore.QRect(0, 0, 211, 31))
