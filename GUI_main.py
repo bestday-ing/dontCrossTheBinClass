@@ -53,100 +53,127 @@ class Ui_Dialog(QMainWindow):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(959, 591)
-        self.frame = QtWidgets.QFrame(Dialog)
-        self.frame.setGeometry(QtCore.QRect(0, 10, 651, 451))
-        self.frame.setFrameShape(QtWidgets.QFrame.Box)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.tableWidget = QtWidgets.QTableWidget(self.frame)
-        self.tableWidget.setGeometry(QtCore.QRect(10, 40, 631, 411))
-        self.tableWidget.setShowGrid(True)
-        self.tableWidget.setGridStyle(QtCore.Qt.SolidLine)
-        self.tableWidget.setRowCount(13)
-        self.tableWidget.setColumnCount(6)
-        self.tableWidget.setObjectName("tableWidget")
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(5, item)
+### Frame 1
+        self.frame1 = QtWidgets.QFrame(Dialog) #frame1은 왼쪽의 타임테이블 있는 프레임
+        self.frame1.setGeometry(QtCore.QRect(0, 10, 651, 451))
+        self.frame1.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame1.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame1.setObjectName("frame1")
 
+        self.TimeTable = QtWidgets.QTableWidget(self.frame1) #시간표 테이블
+        self.TimeTable.setGeometry(QtCore.QRect(10, 40, 631, 411))
+        self.TimeTable.setShowGrid(True)
+        self.TimeTable.setGridStyle(QtCore.Qt.SolidLine)
+        self.TimeTable.setRowCount(13)
+        self.TimeTable.setColumnCount(6)
+        self.TimeTable.setObjectName("TimeTable")
+
+        item = QtWidgets.QTableWidgetItem()
+        self.TimeTable.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.TimeTable.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.TimeTable.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.TimeTable.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.TimeTable.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.TimeTable.setHorizontalHeaderItem(5, item)
         # 셀 클릭시 row col 출력
-        self.tableWidget.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.tableWidget.cellClicked.connect(self.cell_clicked)
+        self.TimeTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.TimeTable.cellClicked.connect(self.cell_clicked)
 
-        self.label = QtWidgets.QLabel(self.frame)
-        self.label.setGeometry(QtCore.QRect(30, 0, 501, 41))
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName("label")
-        self.frame_2 = QtWidgets.QFrame(Dialog)
-        self.frame_2.setGeometry(QtCore.QRect(660, 10, 281, 451))
-        self.frame_2.setFrameShape(QtWidgets.QFrame.Box)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.listView = QtWidgets.QListView(self.frame_2)
-        self.listView.setGeometry(QtCore.QRect(0, 160, 221, 281))
-        self.listView.setObjectName("listView")
-        self.label_3 = QtWidgets.QLabel(self.frame_2)
-        self.label_3.setGeometry(QtCore.QRect(0, 0, 211, 31))
-        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_3.setObjectName("label_3")
-        self.label_4 = QtWidgets.QLabel(self.frame_2)
-        self.label_4.setGeometry(QtCore.QRect(5, 80, 30, 20))
-        self.label_4.setObjectName("label_4")
-        self.label_5 = QtWidgets.QLabel(self.frame_2)
-        self.label_5.setGeometry(QtCore.QRect(6, 53, 30, 20))
-        self.label_5.setObjectName("label_5")
-        self.label_6 = QtWidgets.QLabel(self.frame_2)
-        self.label_6.setGeometry(QtCore.QRect(6, 29, 30, 20))
-        self.label_6.setObjectName("label_6")
-        self.horizontalLayoutWidget = QtWidgets.QWidget(self.frame_2)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(40, 50, 231, 31))
-        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.TTableLabel = QtWidgets.QLabel(self.frame1) #TimetableLabel
+                 # 레이블은 주로 텍스트 상자를 뜻함, 건드릴일 거의 없음
+        self.TTableLabel.setGeometry(QtCore.QRect(30, 0, 501, 41))
+        self.TTableLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.TTableLabel.setObjectName("TTableLabel")
 
-        self.ckBox_grdEtc = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
-        self.ckBox_grdEtc.setObjectName("checkBox_8")
-        self.horizontalLayout.addWidget(self.ckBox_grdEtc)
-        self.ckBox_grd1 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
-        self.ckBox_grd1.setObjectName("checkBox_7")
-        self.horizontalLayout.addWidget(self.ckBox_grd1)
-        self.ckBox_grd2 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
-        self.ckBox_grd2.setObjectName("checkBox_6")
-        self.horizontalLayout.addWidget(self.ckBox_grd2)
-        self.ckBox_grd3 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
-        self.ckBox_grd3.setObjectName("checkBox_5")
-        self.horizontalLayout.addWidget(self.ckBox_grd3)
-        self.ckBox_grd4 = QtWidgets.QCheckBox(self.horizontalLayoutWidget)
-        self.ckBox_grd4.setObjectName("checkBox_4")
-        self.horizontalLayout.addWidget(self.ckBox_grd4)
+### Frame 2
+        self.frame2 = QtWidgets.QFrame(Dialog) #frame2는 오른쪽 과목검색있는곳
+        self.frame2.setGeometry(QtCore.QRect(660, 10, 281, 451))
+        self.frame2.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame2.setObjectName("frame2")
 
-        self.horizontalLayoutWidget_2 = QtWidgets.QWidget(self.frame_2)
-        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(40, 75, 231, 31))
-        self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.ckBox_major = QtWidgets.QCheckBox(self.horizontalLayoutWidget_2)
-        self.ckBox_major.setObjectName("checkBox_3")
-        self.horizontalLayout_2.addWidget(self.ckBox_major)
-        self.ckBox_Mbasic = QtWidgets.QCheckBox(self.horizontalLayoutWidget_2)
-        self.ckBox_Mbasic.setObjectName("checkBox_2")
-        self.horizontalLayout_2.addWidget(self.ckBox_Mbasic)
-        self.ckBox_basis = QtWidgets.QCheckBox(self.horizontalLayoutWidget_2)
-        self.ckBox_basis.setObjectName("checkBox")
+        self.Subjectlist = QtWidgets.QListView(self.frame2) #과목리스트 나오는 상자
+        self.Subjectlist.setGeometry(QtCore.QRect(0, 160, 221, 281))
+        self.Subjectlist.setObjectName("Subjectlist")
 
-        self.horizontalLayout_2.addWidget(self.ckBox_basis)
-        self.GradeSlider = QtWidgets.QSlider(self.frame_2)
+        self.SubSearchLabel = QtWidgets.QLabel(self.frame2) #과목검색 레이블
+        self.SubSearchLabel.setGeometry(QtCore.QRect(0, 0, 211, 31))
+        self.SubSearchLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.SubSearchLabel.setObjectName("SubSearchLabel")
+
+        self.CreditLabel = QtWidgets.QLabel(self.frame2) #학점 레이블
+        self.CreditLabel.setGeometry(QtCore.QRect(6, 29, 30, 20))
+        self.CreditLabel.setObjectName("CreditLabel")
+
+        self.GradeLabel = QtWidgets.QLabel(self.frame2) #학년 레이블
+        self.GradeLabel.setGeometry(QtCore.QRect(6, 53, 30, 20))
+        self.GradeLabel.setObjectName("GradeLabel")
+
+        self.GubunLabel = QtWidgets.QLabel(self.frame2)  # 구분 레이블
+        self.GubunLabel.setGeometry(QtCore.QRect(5, 80, 30, 20))
+        self.GubunLabel.setObjectName("GubunLabel")
+
+        self.GradeLayoutWidget = QtWidgets.QWidget(self.frame2) #학년 Layout의 위젯
+        self.GradeLayoutWidget.setGeometry(QtCore.QRect(40, 50, 231, 31))
+        self.GradeLayoutWidget.setObjectName("GradeLayoutWidget")
+
+        self.GradeLayout = QtWidgets.QHBoxLayout(self.GradeLayoutWidget) #학년Layout 자체(widget과 다른 것임)
+        self.GradeLayout.setContentsMargins(0, 0, 0, 0)
+        self.GradeLayout.setObjectName("GradeLayout")
+
+
+
+
+        self.ckBox_grdEtc = QtWidgets.QCheckBox(self.GradeLayoutWidget) #학년 체크박스 *표
+        self.ckBox_grdEtc.setObjectName("ckBox_grdEtc")
+        self.GradeLayout.addWidget(self.ckBox_grdEtc)
+
+        self.ckBox_grd1 = QtWidgets.QCheckBox(self.GradeLayoutWidget) #학년 체크박스 1학년
+        self.ckBox_grd1.setObjectName("ckBox_grd1")
+        self.GradeLayout.addWidget(self.ckBox_grd1)
+
+        self.ckBox_grd2 = QtWidgets.QCheckBox(self.GradeLayoutWidget) #학년 체크박스 2학년
+        self.ckBox_grd2.setObjectName("ckBox_grd2")
+        self.GradeLayout.addWidget(self.ckBox_grd2)
+
+        self.ckBox_grd3 = QtWidgets.QCheckBox(self.GradeLayoutWidget) #학년 체크박스 3학년
+        self.ckBox_grd3.setObjectName("ckBox_grd3")
+        self.GradeLayout.addWidget(self.ckBox_grd3)
+
+        self.ckBox_grd4 = QtWidgets.QCheckBox(self.GradeLayoutWidget) #학년 체크박스 4학년
+        self.ckBox_grd4.setObjectName("ckBox_grd4")
+        self.GradeLayout.addWidget(self.ckBox_grd4)
+
+        self.GubunLayoutWidget = QtWidgets.QWidget(self.frame2) #구분,즉 전공,전공기반 같은거 체크박스 들어있는 레이아웃
+        self.GubunLayoutWidget.setGeometry(QtCore.QRect(40, 75, 231, 31))
+        self.GubunLayoutWidget.setObjectName("GubunLayoutWidget")
+
+        self.GubunLayout = QtWidgets.QHBoxLayout(self.GubunLayoutWidget) #구분 레이아웃
+        self.GubunLayout.setContentsMargins(0, 0, 0, 0)
+        self.GubunLayout.setObjectName("GubunLayout")
+
+
+
+
+
+        self.ckBox_major = QtWidgets.QCheckBox(self.GubunLayoutWidget) #구분 - 전공
+        self.ckBox_major.setObjectName("ckBox_major")
+        self.GubunLayout.addWidget(self.ckBox_major)
+
+        self.ckBox_Mbasic = QtWidgets.QCheckBox(self.GubunLayoutWidget) #구분 - 전공기반
+        self.ckBox_Mbasic.setObjectName("ckBox_Mbasic")
+        self.GubunLayout.addWidget(self.ckBox_Mbasic)
+
+        self.ckBox_basis = QtWidgets.QCheckBox(self.GubunLayoutWidget) #구분 - 기본소양
+        self.ckBox_basis.setObjectName("ckBox_basis")
+        self.GubunLayout.addWidget(self.ckBox_basis)
+
+        self.GradeSlider = QtWidgets.QSlider(self.frame2) #학점 구분 슬라이더
         self.GradeSlider.setGeometry(QtCore.QRect(41, 28, 221, 22))
         self.GradeSlider.setMaximumSize(QtCore.QSize(221, 16777215))
         self.GradeSlider.setMinimum(1)
@@ -157,69 +184,74 @@ class Ui_Dialog(QMainWindow):
         self.GradeSlider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.GradeSlider.setTickInterval(0)
         self.GradeSlider.setObjectName("GradeSlider")
-        self.comboBox = QtWidgets.QComboBox(self.frame_2)
-        self.comboBox.setGeometry(QtCore.QRect(7, 131, 51, 21))
+
+        self.SearchCombo = QtWidgets.QComboBox(self.frame2) # 검색하는 상자 옆에 교수명같은거 있는 combobox
+        self.SearchCombo.setGeometry(QtCore.QRect(7, 131, 51, 21))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.comboBox.sizePolicy().hasHeightForWidth())
-        self.comboBox.setSizePolicy(sizePolicy)
-        self.comboBox.setObjectName("comboBox")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.pushBt_search = QtWidgets.QPushButton(self.frame_2)
-        self.pushBt_search.setGeometry(QtCore.QRect(220, 130, 61, 23))
+        sizePolicy.setHeightForWidth(self.SearchCombo.sizePolicy().hasHeightForWidth())
+        self.SearchCombo.setSizePolicy(sizePolicy)
+        self.SearchCombo.setObjectName("SearchCombo")
+        self.SearchCombo.addItem("")
+        self.SearchCombo.addItem("")
+        self.SearchCombo.addItem("")
+
+        self.SearchTextEdit = QtWidgets.QPlainTextEdit(self.frame2) #검색어 입력할 텍스트 상자
+        self.SearchTextEdit.setGeometry(QtCore.QRect(60, 130, 161, 21))
+        self.SearchTextEdit.setAcceptDrops(True)
+        self.SearchTextEdit.setAutoFillBackground(False)
+        self.SearchTextEdit.setLineWidth(1)
+        self.SearchTextEdit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.SearchTextEdit.setObjectName("SearchTextEdit")
+
+        self.SearchButton = QtWidgets.QPushButton(self.frame2) #검색하기 버튼
+        self.SearchButton.setGeometry(QtCore.QRect(220, 130, 61, 23))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushBt_search.sizePolicy().hasHeightForWidth())
-        self.pushBt_search.setSizePolicy(sizePolicy)
-        self.pushBt_search.setObjectName("pushBt_search")
-        self.plainTextEdit = QtWidgets.QPlainTextEdit(self.frame_2)
-        self.plainTextEdit.setGeometry(QtCore.QRect(60, 130, 161, 21))
-        self.plainTextEdit.setAcceptDrops(True)
-        self.plainTextEdit.setAutoFillBackground(False)
-        self.plainTextEdit.setLineWidth(1)
-        self.plainTextEdit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.plainTextEdit.setObjectName("plainTextEdit")
-        self.frame_3 = QtWidgets.QFrame(Dialog)
-        self.frame_3.setGeometry(QtCore.QRect(10, 470, 801, 80))
-        self.frame_3.setFrameShape(QtWidgets.QFrame.Box)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setLineWidth(1)
-        self.frame_3.setObjectName("frame_3")
-        self.label_2 = QtWidgets.QLabel(self.frame_3)
-        self.label_2.setGeometry(QtCore.QRect(20, 0, 771, 21))
-        self.label_2.setObjectName("label_2")
-        self.pushBt_login = QtWidgets.QPushButton(self.frame_3)
-        self.pushBt_login.setGeometry(QtCore.QRect(320, 40, 111, 32))
-        self.pushBt_login.setObjectName("pushButton_3")
-        self.label_7 = QtWidgets.QLabel(self.frame_3)
-        self.label_7.setGeometry(QtCore.QRect(260, 20, 231, 21))
-        self.label_7.setObjectName("label_7")
-        self.pushBt_update = QtWidgets.QPushButton(Dialog)
-        self.pushBt_update.setGeometry(QtCore.QRect(810, 470, 121, 81))
-        self.pushBt_update.setObjectName("pushButton_2")
-        #########|
-        self.pushBt_update = QtWidgets.QPushButton(Dialog)
-        self.pushBt_update.setGeometry(QtCore.QRect(810, 470, 121, 81))
-        self.pushBt_update.setObjectName("pushBt_update") #update button
+        sizePolicy.setHeightForWidth(self.SearchButton.sizePolicy().hasHeightForWidth())
+        self.SearchButton.setSizePolicy(sizePolicy)
+        self.SearchButton.setObjectName("SearchButton")
+
+
+### Frame 3
+        self.frame3 = QtWidgets.QFrame(Dialog) #frame 3은 밑의 학점 및 로그인 기능있는 프레임
+        self.frame3.setGeometry(QtCore.QRect(10, 470, 801, 80))
+        self.frame3.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame3.setLineWidth(1)
+        self.frame3.setObjectName("frame3")
+
+        self.GraduateLabel = QtWidgets.QLabel(self.frame3) #졸업학점/이수학점 레이블. 건드릴필요없음
+        self.GraduateLabel.setGeometry(QtCore.QRect(20, 0, 771, 21))
+        self.GraduateLabel.setObjectName("GraduateLabel")
+
+        self.LoginButton = QtWidgets.QPushButton(self.frame3) #로그인기능 버튼
+        self.LoginButton.setGeometry(QtCore.QRect(320, 40, 111, 32))
+        self.LoginButton.setObjectName("LoginButton")
+
+        self.NeedLoginLabel = QtWidgets.QLabel(self.frame3) #로그인하라는 레이블. 건드릴필요없음
+        self.NeedLoginLabel.setGeometry(QtCore.QRect(260, 20, 231, 21))
+        self.NeedLoginLabel.setObjectName("NeedLoginLabel")
+
+        self.UpdateButton = QtWidgets.QPushButton(Dialog) #업데이트 버튼
+        self.UpdateButton.setGeometry(QtCore.QRect(810, 470, 121, 81))
+        self.UpdateButton.setObjectName("UpdateButton")
+        self.UpdateButton = QtWidgets.QPushButton(Dialog)
+        self.UpdateButton.setGeometry(QtCore.QRect(810, 470, 121, 81))
+        self.UpdateButton.setObjectName("UpdateButton")
         #self.pushBt_update.setDisabled(True)
-
-
-        self.pushBt_update.clicked.connect(self.updateBt_pushed)
+        self.UpdateButton.clicked.connect(self.updateBt_pushed)
         #########################################################
         #########################################################
-
-
-        self.pushBt_login.clicked.connect(self.loginBt_pushed)
+        self.LoginButton.clicked.connect(self.loginBt_pushed)
         #########################################################
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-        # event handler 설치 : 상응하는 버튼에 설치 모듈화 하기 전 테스트로 여기 배치 나중에 다르게 빼도 괜찮음
+# event handler 설치 : 상응하는 버튼에 설치 모듈화 하기 전 테스트로 여기 배치 나중에 다르게 빼도 괜찮음
 
     def loginBt_pushed(self):  # 로그인 팝업창
         print("Login Btn pressed")
@@ -229,8 +261,8 @@ class Ui_Dialog(QMainWindow):
         if dialog.exec_() == login_popup.Dialog.Accepted:
             self.profile = dialog.get_output()
             print(self.profile)
-            self.label_7.setText(self.profile['sname'] + '님 환영합니다')
-            self.pushBt_login.hide()
+            self.NeedLoginLabel.setText(self.profile['sname'] + '님 환영합니다')
+            self.LoginButton.hide()
 
     def updateBt_pushed(self):
         if (self.profile == -1):
@@ -244,23 +276,25 @@ class Ui_Dialog(QMainWindow):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        item = self.tableWidget.horizontalHeaderItem(0)
+        item = self.TimeTable.horizontalHeaderItem(0)
         item.setText(_translate("Dialog", "월"))
-        item = self.tableWidget.horizontalHeaderItem(1)
+        item = self.TimeTable.horizontalHeaderItem(1)
         item.setText(_translate("Dialog", "화"))
-        item = self.tableWidget.horizontalHeaderItem(2)
+        item = self.TimeTable.horizontalHeaderItem(2)
         item.setText(_translate("Dialog", "수"))
-        item = self.tableWidget.horizontalHeaderItem(3)
+        item = self.TimeTable.horizontalHeaderItem(3)
         item.setText(_translate("Dialog", "목"))
-        item = self.tableWidget.horizontalHeaderItem(4)
+        item = self.TimeTable.horizontalHeaderItem(4)
         item.setText(_translate("Dialog", "금"))
-        item = self.tableWidget.horizontalHeaderItem(5)
+        item = self.TimeTable.horizontalHeaderItem(5)
         item.setText(_translate("Dialog", "토"))
-        self.label.setText(_translate("Dialog", "Time Table"))
-        self.label_3.setText(_translate("Dialog", "과목검색"))
-        self.label_4.setText(_translate("Dialog", "구분"))
-        self.label_5.setText(_translate("Dialog", "학년"))
-        self.label_6.setText(_translate("Dialog", "학점"))
+
+        self.TTableLabel.setText(_translate("Dialog", "Time Table"))
+        self.SubSearchLabel.setText(_translate("Dialog", "과목검색"))
+        self.GubunLabel.setText(_translate("Dialog", "구분"))
+        self.GradeLabel.setText(_translate("Dialog", "학년"))
+        self.CreditLabel.setText(_translate("Dialog", "학점"))
+
         self.ckBox_grdEtc.setText(_translate("Dialog", "*"))
         self.ckBox_grd1.setText(_translate("Dialog", "1"))
         self.ckBox_grd2.setText(_translate("Dialog", "2"))
@@ -285,15 +319,15 @@ class Ui_Dialog(QMainWindow):
         # 슬라이더 리스너
         self.GradeSlider.valueChanged.connect(self.MoveSlider)
 
-        self.comboBox.setItemText(0, _translate("Dialog", "교수명"))
-        self.comboBox.setItemText(1, _translate("Dialog", "과목명"))
-        self.comboBox.setItemText(2, _translate("Dialog", "과목코드"))
-        self.pushBt_search.setText(_translate("Dialog", "검색"))
-        self.label_2.setText(_translate("Dialog", "졸업학점/ 이수학점"))
-        self.pushBt_login.setText(_translate("Dialog", "로그인"))
-        self.label_7.setText(_translate("Dialog", " 학점을 보기 위해서는 로그인이 필요합니다."))
-        self.label_7.resize(self.label_7.sizeHint())        # 라벨 내용만큼 자동 리사이징
-        self.pushBt_update.setText(_translate("Dialog", "강의\n업데이트"))
+        self.SearchCombo.setItemText(0, _translate("Dialog", "교수명"))
+        self.SearchCombo.setItemText(1, _translate("Dialog", "과목명"))
+        self.SearchCombo.setItemText(2, _translate("Dialog", "과목코드"))
+        self.SearchButton.setText(_translate("Dialog", "검색"))
+        self.GraduateLabel.setText(_translate("Dialog", "졸업학점/ 이수학점"))
+        self.LoginButton.setText(_translate("Dialog", "로그인"))
+        self.NeedLoginLabel.setText(_translate("Dialog", " 학점을 보기 위해서는 로그인이 필요합니다."))
+        self.NeedLoginLabel.resize(self.NeedLoginLabel.sizeHint())        # 라벨 내용만큼 자동 리사이징
+        self.UpdateButton.setText(_translate("Dialog", "강의\n업데이트"))
 
 
 
