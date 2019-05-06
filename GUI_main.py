@@ -3,10 +3,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QPoint, Qt, pyqtSlot
 import login_popup
+import Search_lecture
 
 creditCstate = [False]
 yearCstate = [False, False, False, False, False]  # * 1 2 3 4
 typeCstate = [False, False, False]  # 공학전공 전공기반 기본소양
+
+
 
 ClickedStateManager = [creditCstate, yearCstate, typeCstate, 0, 0, 0, 0]  # 맨 마지막 토탈 썸인데
 
@@ -29,7 +32,17 @@ class Ui_Dialog(QMainWindow):
         self.move(qr.topLeft())
 
     def cell_clicked(self, row, column):
-        print("Row : %d | Column : %d" % (row, column))  # 선택된 영역 row,col 받아오기
+         print("Row : %d | Column : %d" % (row, column))  # 선택된 영역 row,col 받아오기
+
+    def cell_dragged(self,row,col):     #drag시 선택된 영역 row, col 받아오기
+     #global count
+     #global table_x
+     #global table_y    table에 대한 return을 따로 주지 않고 search_lecture에 있는 변수를 받아와서 사용
+     Search_lecture.table_x.append(row)
+     Search_lecture.table_y.append(col)
+     print('Start pos : ' + str(Search_lecture.table_x[0])+' , '+str(Search_lecture.table_y[0]))                          #시작 지점
+     print('End pos : ' + str(Search_lecture.table_x[len(Search_lecture.table_x)-1])+
+           ' , '+str(Search_lecture.table_y[len(Search_lecture.table_y)-1]))  #끝   지점
 
     def mousePressEvent(self, event):
         self.oldPos = event.globalPos()
@@ -116,7 +129,9 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setHorizontalHeaderItem(5, item)
         # 셀 클릭시 row col 출력
         self.TimeTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.TimeTable.cellClicked.connect(self.cell_clicked)
+        self.TimeTable.cellClicked.connect(self.cell_clicked)       #단일 cell 선택시 작동하는 함수
+        self.TimeTable.cellEntered.connect(self.cell_dragged)       #다수의 cell 선택시 작동하는 삼수
+
 
         self.TTableLabel = QtWidgets.QLabel(self.frame1) #TimetableLabel
                  # 레이블은 주로 텍스트 상자를 뜻함, 건드릴일 거의 없음
@@ -139,7 +154,7 @@ class Ui_Dialog(QMainWindow):
         timeslot = QtGui.QStandardItemModel()
         for f in testsubject:
             timeslot.appendRow(QtGui.QStandardItem(f))
-        self.Subjectlist.setModel(timeslot)
+        self.Subjectlist.setModel(timeslot)     #입력받은 데이터값 출력부
 
         self.SubSearchLabel = QtWidgets.QLabel(self.frame2) #과목검색 레이블
         self.SubSearchLabel.setGeometry(QtCore.QRect(0, 0, 211, 31))
