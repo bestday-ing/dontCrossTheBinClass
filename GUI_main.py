@@ -140,14 +140,14 @@ class Ui_Dialog(QMainWindow):
             query += ")"
 
             if(creditCstate[0]):
+                callFlag = True
                 query += self.MoveSlider() # submsg 받아옴
 
         totalClickSum = sum(gradeCstate) + sum(typeCstate)
         if(totalClickSum == 0 ):
             query = "select * from Course"
             if(creditCstate[0]):
-                callflag = True
-                self.MoveSlider()
+                return self.MoveSlider()
 
 
         print(getquery())
@@ -159,12 +159,13 @@ class Ui_Dialog(QMainWindow):
         global gradeCstate
         global typeCstate
         global creditCstate
+        global callFlag
 
         submsg =""
         size = self.GradeSlider.value()
         creditCstate[0] = True;
 
-        if(sum(gradeCstate) + sum(typeCstate)):
+        if(sum(gradeCstate) + sum(typeCstate)): # 앞서 하나라도 클릭이 되어 있다면
             submsg += " and "
             submsg += "credit = " + str(size)
             index = query.rfind("credit")
@@ -176,16 +177,19 @@ class Ui_Dialog(QMainWindow):
                 temp = query.rsplit(";", 1)
                 query = temp[0]
                 query += submsg
-        else:
+        else: #클릭이 아무것도 안되어 있다면
             query = "select * from Course where " + "credit = " + str(size)
 
 
         # print(size) return에서 size도 뺀 상황
         #  print(submsg)
         if(callFlag):
+            callFlag = False
             return submsg
-        else:
+        else :
             print(getquery())
+
+
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
