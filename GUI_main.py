@@ -6,14 +6,17 @@ import login_popup
 import Search_lecture
 
 creditCstate = [False]
-yearCstate = [False, False, False, False, False]  # * 1 2 3 4
+gradeCstate = [False, False, False, False, False]  # * 1 2 3 4
 typeCstate = [False, False, False]  # 공학전공 전공기반 기본소양
 
 
+query = "";
+callFlag = False
 
-ClickedStateManager = [creditCstate, yearCstate, typeCstate, 0, 0, 0, 0]  # 맨 마지막 토탈 썸인데
-
-
+def getquery():
+    global query
+    query +=";"
+    return query
 
 class Ui_Dialog(QMainWindow):
 
@@ -59,10 +62,17 @@ class Ui_Dialog(QMainWindow):
             # print('ESC Pressed : close app')  # 종료 메세지 출력
             self.close()
 
-    def checkBoxState(self):
-        global ClickedStateManager
-        typeName = ["'공학전공'", "'전공기반'", "'기본소양'"]
-        msg = "select * from Course where "
+    def checkBoxState(self): #누를 때 마다 실시간으로 반응하기 위함
+        # creditName = ["'1'", "'2'", "'3'", "'4'", "'5'"];
+        gradeName = ["'*'", "'1'", "'2'", "'3'", "'4'"];
+        typeName = ["'공학전공'", "'전공기반'", "'기본소양'"];
+        global typeCstate
+        global gradeCstate
+        global creditCstate
+        global query
+        global callFlag
+
+        query = "select * from Course where "
         if self.ckBox_major.isChecked():
             typeCstate[0] = True
         else:
@@ -79,23 +89,103 @@ class Ui_Dialog(QMainWindow):
             typeCstate[2] = False
 
         orN = sum(typeCstate) - 1
+        if(sum(typeCstate)>0):
+            query += "("
+            for i in range (len(typeCstate)):
+                if typeCstate[i]:
+                    query += "type = " + typeName[i]
+                    if orN > 0:
+                        query += ' or '
+                        orN -= 1
+            query += ")"
 
-        msg += "("
-        for i in range (len(typeCstate)):
-            if typeCstate[i]:
-                msg += "type = " + typeName[i]
-                if orN > 0:
-                    msg += ' or '
-                    orN -= 1
-        msg += ");"
 
-        print(msg)
-        return msg
+        if self.ckBox_grdEtc.isChecked():
+            gradeCstate[0] = True
+        else:
+            gradeCstate[0] = False
+
+        if self.ckBox_grd1.isChecked():
+            gradeCstate[1] = True
+        else:
+            gradeCstate[1] = False
+
+        if self.ckBox_grd2.isChecked():
+            gradeCstate[2] = True
+        else:
+            gradeCstate[2] = False
+
+        if self.ckBox_grd3.isChecked():
+            gradeCstate[3] = True
+        else:
+            gradeCstate[3] = False
+
+        if self.ckBox_grd4.isChecked():
+            gradeCstate[4] = True
+        else:
+            gradeCstate[4] = False
+
+        if(sum(typeCstate)>0 and sum(gradeCstate)>0): #앞에 하나라도 클릭된 게 있고 뒤에도 클릭된 게 있다면
+            query += " and "
+
+        orN = sum(gradeCstate) - 1
+        if(sum(gradeCstate)>0):
+            query += "("
+            for i in range (len(gradeCstate)):
+                if gradeCstate[i]:
+                    query += "year = " + gradeName[i]
+                    if orN > 0:
+                        query += ' or '
+                        orN -= 1
+            query += ")"
+
+            if(creditCstate[0]):
+                query += self.MoveSlider() # submsg 받아옴
+
+        totalClickSum = sum(gradeCstate) + sum(typeCstate)
+        if(totalClickSum == 0 ):
+            query = "select * from Course"
+            if(creditCstate[0]):
+                callflag = True
+                self.MoveSlider()
+
+
+        print(getquery())
+
+        return query
 
     def MoveSlider(self):
+        global query
+        global gradeCstate
+        global typeCstate
+        global creditCstate
+
+        submsg =""
         size = self.GradeSlider.value()
-        print(size)
-        return size
+        creditCstate[0] = True;
+
+        if(sum(gradeCstate) + sum(typeCstate)):
+            submsg += " and "
+            submsg += "credit = " + str(size)
+            index = query.rfind("credit")
+            if (index > 0): # 앞서 credit 검색이 존재한다면
+                temp = query.rsplit("credit", 1)
+                query = temp[0]
+                query += "credit = " + str(size)
+            else: #존재하지 않는다면
+                temp = query.rsplit(";", 1)
+                query = temp[0]
+                query += submsg
+        else:
+            query = "select * from Course where " + "credit = " + str(size)
+
+
+        # print(size) return에서 size도 뺀 상황
+        #  print(submsg)
+        if(callFlag):
+            return submsg
+        else:
+            print(getquery())
 
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
