@@ -4,17 +4,28 @@ DB_Path = "./Project.db"
 con = sqlite3.connect(DB_Path)
 DB = con.cursor()
 def CreateDataBase() :
+    DB.execute('DROP TABLE IF EXISTS Course;')
+    DB.execute('DROP TABLE IF EXISTS Time_INDEX;')
     DB.execute('CREATE TABLE IF NOT EXISTS Course(code VARCHAR(15) PRIMARY KEY, type TEXT, \
-                year SMALLINT, cname TEXT, credit SMALLINT, pname TEXT, time TEXT, room TEXT, etc TEXT);')
+                year SMALLINT, cname TEXT, credit SMALLINT, pname TEXT, room TEXT, etc TEXT);')
+    DB.execute('CREATE TABLE IF NOT EXISTS Time_INDEX(time_id INTEGER PRIMARY KEY AUTOINCREMENT,\
+                code VARCHAR(15) REFERENCES Course(code), tindex int);')
     con.commit()
 
 def INSERT(tuple = []) :
-    DB.execute("INSERT OR IGNORE INTO Course values(?, ?, ?, ?, ?, ?, ?, ?, ?);", tuple)
+    DB.execute("INSERT OR IGNORE INTO Course values(?, ?, ?, ?, ?, ?, ?, ?);", tuple)
+    con.commit()
+
+def INSERT_TIME_INDEX(code, ctime = []) :
+    for i in range(len(ctime)):
+        DB.execute("INSERT OR IGNORE INTO Time_INDEX (code, tindex) values(?, ?);", (code, ctime[i]))
     con.commit()
 
 def SELECT_db():
     for row in DB.execute("SELECT * FROM Course"):
-         print(row)
+        print(row)
+    for row in DB.execute("SELECT * FROM Time_INDEX"):
+        print(row)
     con.commit()
 
 def DELETE():

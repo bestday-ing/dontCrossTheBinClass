@@ -7,14 +7,14 @@ class Crawler:
     def __init__(self):
         super().__init__()
         macProDriverPath = '/Users/yubin/ChromeDriver/chromedriver'     # 맥북용 드라이버 경로
-        windowDriverPath = 'C:\Python\chromedriver'                     # 윈도우용 드라이버 경로
+        windowDriverPath = 'C:/Python/chromedriver'                     # 윈도우용 드라이버 경로
         chrome_option = webdriver.ChromeOptions()
         chrome_option.add_argument("--window-size=1280,720")  # 윈도우 사이즈 조절해서 모든 column 로드
         #chrome_option.add_argument("headless")                # 창 없는 크롬 모드
         if(platform.system() == 'Windows'): #platform
-         self.driver = webdriver.Chrome(windowDriverPath, chrome_options=chrome_option)  # 윈도우 크롬 드라이버 불러오기
+            self.driver = webdriver.Chrome(windowDriverPath, options=chrome_option)  # 윈도우 크롬 드라이버 불러오기
         else:
-         self.driver = webdriver.Chrome(macProDriverPath, chrome_options=chrome_option)  # 맥 드라이버 불러오기
+            self.driver = webdriver.Chrome(macProDriverPath, options=chrome_option)  # 맥 드라이버 불러오기
         self.driver.implicitly_wait(3)
 
     # select 태그에서 선택 1. select 클래스 이용
@@ -62,10 +62,12 @@ class Crawler:
 
         cTable = self.driver.find_elements_by_tag_name('tr')
         TupleClass = {'code' : 'th4', 'gubun' : 'th2', 'year' : 'th1', 'cname' : 'th5',
-                     'credit' : 'th6', 'pname' : 'th9', 'ctime' : 'th10','room' : 'th11' ,'etc' : 'th16'}
+                     'credit' : 'th6', 'pname' : 'th9', 'room' : 'th11' ,'etc' : 'th16'}
         Tuple = list()  # 데이터베이스에 insert 될 튜플
 
+        #print('DB 생성 이전')
         DataBase.CreateDataBase()
+        #print('DB 삭제 이전')
         DataBase.DELETE()
         for Table_row in cTable:
             if(Table_row == cTable[0]):
@@ -74,9 +76,12 @@ class Crawler:
                 Tuple.append(Table_row.find_element_by_class_name(classname).text)
             Tuple[2] = int(Tuple[2])
             Tuple[4] = int(Tuple[4])
-            # print(Tuple[6])
-            Tuple[6] = self.ParsingT(Tuple[6])
+            #print('Tuple 넣기 이전')
             DataBase.INSERT(Tuple)
+            # print(Tuple[6]))
+            #Time_ROW = null
+            self.ParsingTime(Tuple[0], Table_row.find_element_by_class_name('th10').text)
+            #Tuple[6] = self.ParsingTime(Tuple[6])
             #print(Tuple) # 추가될 튜플 출력
             Tuple.clear()
         DataBase.SELECT_db()
@@ -84,10 +89,10 @@ class Crawler:
     def close(self):
         self.driver.close()
 
-    def ParsingT(self, TT):
-        time_str = ""
-        print(TT)
-        temp = TT.split('\n')
+    def ParsingTime(self, code, Time_ROW):
+        time_arr = list()
+        ##print(TT)
+        temp = Time_ROW.split('\n')
         print(temp)
         for j in range(len(temp)):  # 배열 길이만큼 j번 돌기
             if (temp[j][0] == '월'):
@@ -97,7 +102,7 @@ class Crawler:
                 for k in single:
                     row = self.returnROW(k)
                     time = row * 7 + col
-                    time_str += str(time) + ','
+                    time_arr.append(time)
             elif (temp[j][0] == '화'):
                 col = 1
                 single = temp[j][1:len(temp[j])]
@@ -105,7 +110,7 @@ class Crawler:
                 for k in single:
                     row = self.returnROW(k)
                     time = row * 7 + col
-                    time_str += str(time) + ','
+                    time_arr.append(time)
             elif (temp[j][0] == '수'):
                 col = 2
                 single = temp[j][1:len(temp[j])]
@@ -113,7 +118,7 @@ class Crawler:
                 for k in single:
                     row = self.returnROW(k)
                     time = row * 7 + col
-                    time_str += str(time) + ','
+                    time_arr.append(time)
             elif (temp[j][0] == '목'):
                 col = 3
                 single = temp[j][1:len(temp[j])]
@@ -121,7 +126,7 @@ class Crawler:
                 for k in single:
                     row = self.returnROW(k)
                     time = row * 7 + col
-                    time_str += str(time) + ','
+                    time_arr.append(time)
             elif (temp[j][0] == '금'):
                 col = 4
                 single = temp[j][1:len(temp[j])]
@@ -129,7 +134,7 @@ class Crawler:
                 for k in single:
                     row = self.returnROW(k)
                     time = row * 7 + col
-                    time_str += str(time) + ','
+                    time_arr.append(time)
             elif (temp[j][0] == '토'):
                 col = 5
                 single = temp[j][1:len(temp[j])]
@@ -137,7 +142,7 @@ class Crawler:
                 for k in single:
                     row = self.returnROW(k)
                     time = row * 7 + col
-                    time_str += str(time) + ','
+                    time_arr.append(time)
             elif (temp[j][0] == '일'):
                 col = 6
                 single = temp[j][1:len(temp[j])]
@@ -145,7 +150,7 @@ class Crawler:
                 for k in single:
                     row = self.returnROW(k)
                     time = row * 7 + col
-                    time_str += str(time) + ','
+                    time_arr.append(time)
             else:
                 col = -999  # 월화수목금토일 이외의 경우 마이너스 가중치 (예외처리용)
                 single = temp[j][1:len(temp[j])]
@@ -153,13 +158,14 @@ class Crawler:
                 for k in single:
                     row = self.returnROW(k)
                     time = row * 7 + col
-                    time_str += str(time) + ','
-        time_str = time_str.rstrip(',')  # 마지막에 콤마(,) 하나 떼기
-        print(time_str)  # 음수는 0교시 혹은 다른 예외의 경우
-        return time_str
+                    time_arr.append(time)
+        #time_str = time_str.rstrip(',')  # 마지막에 콤마(,) 하나 떼기
+        #print(time_arr)  # 음수는 0교시 혹은 다른 예외의 경우
+        #print(code)
+        DataBase.INSERT_TIME_INDEX(code, time_arr)
+        return
 
     def returnROW(self, single_time):
-        row = -1
         if (single_time == '1A'):
             row = 0
         elif (single_time == '1B'):
