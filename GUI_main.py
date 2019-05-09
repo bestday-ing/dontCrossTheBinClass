@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QPoint, Qt, pyqtSlot
 import login_popup
-import Search_lecture
+import Search_lecture       #Table의 좌표를 받아서 검색하는 기능
 
 creditCstate = [False]
 gradeCstate = [False, False, False, False, False]  # * 1 2 3 4
@@ -33,19 +33,6 @@ class Ui_Dialog(QMainWindow):
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
-
-    def cell_clicked(self, row, column):
-         print("Row : %d | Column : %d" % (row, column))  # 선택된 영역 row,col 받아오기
-
-    def cell_dragged(self,row,col):     #drag시 선택된 영역 row, col 받아오기
-     #global count
-     #global table_x
-     #global table_y    table에 대한 return을 따로 주지 않고 search_lecture에 있는 변수를 받아와서 사용
-     Search_lecture.table_x.append(row)
-     Search_lecture.table_y.append(col)
-     print('Start pos : ' + str(Search_lecture.table_x[0])+' , '+str(Search_lecture.table_y[0]))                          #시작 지점
-     print('End pos : ' + str(Search_lecture.table_x[len(Search_lecture.table_x)-1])+
-           ' , '+str(Search_lecture.table_y[len(Search_lecture.table_y)-1]))  #끝   지점
 
     def mousePressEvent(self, event):
         self.oldPos = event.globalPos()
@@ -223,8 +210,8 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setHorizontalHeaderItem(5, item)
         # 셀 클릭시 row col 출력
         self.TimeTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.TimeTable.cellClicked.connect(self.cell_clicked)       #단일 cell 선택시 작동하는 함수
-        self.TimeTable.cellEntered.connect(self.cell_dragged)       #다수의 cell 선택시 작동하는 삼수
+        self.TimeTable.cellClicked.connect(Search_lecture.get_clicked_pos)       #단일 cell 선택시 작동하는 함수
+        self.TimeTable.cellEntered.connect(Search_lecture.get_dragged_pos)       #다수의 cell 선택시 작동하는 삼수
 
 
         self.TTableLabel = QtWidgets.QLabel(self.frame1) #TimetableLabel
