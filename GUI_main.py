@@ -4,18 +4,22 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QPoint, Qt, pyqtSlot
 import login_popup
 import Search_lecture       #Table의 좌표를 받아서 검색하는 기능
+import DataBase
 
 creditCstate = [False]
 gradeCstate = [False, False, False, False, False]  # * 1 2 3 4
 typeCstate = [False, False, False]  # 공학전공 전공기반 기본소양
-temp = []
-
 query = ""
 callFlag = False
 
+print_subject = []
+
 def getquery():
-    global query
-    query +=";"
+    global testsubject
+    for row in  DataBase.DB.execute(query):
+        dataframe =str(row[0]) +'\n'+ str(row[3]+"\n"+row[5])
+        print_subject.append(dataframe)
+    DataBase.con.commit()
     return query
 
 class Ui_Dialog(QMainWindow):
@@ -197,7 +201,7 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setGeometry(QtCore.QRect(10, 40, 631, 411))
         self.TimeTable.setShowGrid(True)
         self.TimeTable.setGridStyle(QtCore.Qt.SolidLine)
-        self.TimeTable.setRowCount(20)
+        self.TimeTable.setRowCount(26)
         self.TimeTable.setColumnCount(7)
         self.TimeTable.setObjectName("TimeTable")
         self.TimeTable.setEditTriggers(QAbstractItemView.NoEditTriggers)    #Edit 금지 모드
@@ -222,7 +226,7 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.TimeTable.cellClicked.connect(Search_lecture.get_clicked_pos)       #단일 cell 선택시 작동하는 함수
         self.TimeTable.cellEntered.connect(Search_lecture.get_dragged_pos)       #다수의 cell 선택시 작동하는 삼수
-        self.TimeTable.cellPressed.connect(Search_lecture.reset_table)
+        #self.TimeTable.cellPressed.connect(Search_lecture.reset_table)           #수정 필요
 
 
 
@@ -240,16 +244,10 @@ class Ui_Dialog(QMainWindow):
         self.frame2.setObjectName("frame2")
 
         self.Subjectlist = QtWidgets.QListView(self.frame2) #과목리스트 나오는 상자
-        self.Subjectlist.setGeometry(QtCore.QRect(0, 160, 221, 281))
+        self.Subjectlist.setGeometry(QtCore.QRect(7, 160, 270, 281))
         self.Subjectlist.setObjectName("Subjectlist")
-
         self.Subjectlist.setEditTriggers(QAbstractItemView.NoEditTriggers)  #edit 금지 모드
 
-        testsubject = ('새벽', '아침', '점심', '저녁', '밤')
-        timeslot = QtGui.QStandardItemModel()
-        for f in testsubject:
-            timeslot.appendRow(QtGui.QStandardItem(f))
-        self.Subjectlist.setModel(timeslot)     #입력받은 데이터값 출력부
 
         self.SubSearchLabel = QtWidgets.QLabel(self.frame2) #과목검색 레이블
         self.SubSearchLabel.setGeometry(QtCore.QRect(0, 0, 211, 31))
@@ -403,6 +401,8 @@ class Ui_Dialog(QMainWindow):
 
 # event handler 설치 : 상응하는 버튼에 설치 모듈화 하기 전 테스트로 여기 배치 나중에 다르게 빼도 괜찮음
     def searchBt_pushed(self):  # 검색창 입력
+        timeslot = QtGui.QStandardItemModel()
+        #timeslot.removeRows(0,timeslot.Count())
         comboResult = self.SearchCombo.currentText()  # 콤보박스 입력값
         searchResult = self.SearchTextEdit.toPlainText()  # 검색창 입력값
         gubunResult = self.checkBoxState()  # 구분 체크박스 입력값
@@ -410,6 +410,9 @@ class Ui_Dialog(QMainWindow):
         print("SearchButton Pushed\n교과구분 : " + comboResult + " 검색어 : " + searchResult)
         print("구분 checkbox : " + gubunResult)
         print("학점 선택 : " + str(creditResult))
+        for f in print_subject:
+            timeslot.appendRow(QtGui.QStandardItem(f))
+        self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
 
     def loginBt_pushed(self):  # 로그인 팝업창
         print("Login Btn pressed")

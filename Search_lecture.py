@@ -2,12 +2,15 @@ count = 0
 table_x = []
 table_y = []
 
+
 search_table_x = []
 search_table_y = []
 #좌표의 cell위치를 저장할 변수
 #따로 return을 받지 않고 이 변수를 GUI_main에서 바로 사용
 
 def get_clicked_pos(row, column):
+    table_x[0] = row
+    table_y[1] = column
     print("Pos :  %d , %d" % (row, column))  # 선택된 영역 row,col 받아오기
 
 def get_dragged_pos(row,col):     #drag시 선택된 영역 row, col 받아오기
@@ -20,4 +23,3 @@ def get_dragged_pos(row,col):     #drag시 선택된 영역 row, col 받아오�
 def reset_table():
     del table_x[:]
     del table_y[:]
-
