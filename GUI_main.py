@@ -8,9 +8,9 @@ import Search_lecture       #Table의 좌표를 받아서 검색하는 기능
 creditCstate = [False]
 gradeCstate = [False, False, False, False, False]  # * 1 2 3 4
 typeCstate = [False, False, False]  # 공학전공 전공기반 기본소양
+temp = []
 
-
-query = "";
+query = ""
 callFlag = False
 
 def getquery():
@@ -43,16 +43,21 @@ class Ui_Dialog(QMainWindow):
         self.move(self.x() + delta.x(), self.y() + delta.y())
         self.oldPos = event.globalPos()
 
-    # ESC로 윈도우 종료 이벤트
+    # Key 입력 이벤트
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape:
-            # print('ESC Pressed : close app')  # 종료 메세지 출력
+        if event.key() == Qt.Key_Control:
+            temp_x = Search_lecture.table_x
+            temp_y = Search_lecture.table_y
+            print(temp_x)
+            print(temp_y)
+        if event.key() == Qt.Key_Escape:        #ESC로 윈도우 종료 이벤트
             self.close()
+
 
     def checkBoxState(self): #누를 때 마다 실시간으로 반응하기 위함
         # creditName = ["'1'", "'2'", "'3'", "'4'", "'5'"];
-        gradeName = ["'*'", "'1'", "'2'", "'3'", "'4'"];
-        typeName = ["'공학전공'", "'전공기반'", "'기본소양'"];
+        gradeName = ["'*'", "'1'", "'2'", "'3'", "'4'"]
+        typeName = ["'공학전공'", "'전공기반'", "'기본소양'"]
         global typeCstate
         global gradeCstate
         global creditCstate
@@ -150,7 +155,7 @@ class Ui_Dialog(QMainWindow):
 
         submsg =""
         size = self.GradeSlider.value()
-        creditCstate[0] = True;
+        creditCstate[0] = True
 
         if(sum(gradeCstate) + sum(typeCstate)): # 앞서 하나라도 클릭이 되어 있다면
             submsg += " and "
@@ -192,9 +197,12 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setGeometry(QtCore.QRect(10, 40, 631, 411))
         self.TimeTable.setShowGrid(True)
         self.TimeTable.setGridStyle(QtCore.Qt.SolidLine)
-        self.TimeTable.setRowCount(13)
-        self.TimeTable.setColumnCount(6)
+        self.TimeTable.setRowCount(20)
+        self.TimeTable.setColumnCount(7)
         self.TimeTable.setObjectName("TimeTable")
+        self.TimeTable.setEditTriggers(QAbstractItemView.NoEditTriggers)    #Edit 금지 모드
+
+
 
         item = QtWidgets.QTableWidgetItem()
         self.TimeTable.setHorizontalHeaderItem(0, item)
@@ -208,10 +216,14 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setHorizontalHeaderItem(4, item)
         item = QtWidgets.QTableWidgetItem()
         self.TimeTable.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.TimeTable.setHorizontalHeaderItem(6, item)
         # 셀 클릭시 row col 출력
         self.TimeTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.TimeTable.cellClicked.connect(Search_lecture.get_clicked_pos)       #단일 cell 선택시 작동하는 함수
         self.TimeTable.cellEntered.connect(Search_lecture.get_dragged_pos)       #다수의 cell 선택시 작동하는 삼수
+        self.TimeTable.cellPressed.connect(Search_lecture.reset_table)
+
 
 
         self.TTableLabel = QtWidgets.QLabel(self.frame1) #TimetableLabel
@@ -230,6 +242,8 @@ class Ui_Dialog(QMainWindow):
         self.Subjectlist = QtWidgets.QListView(self.frame2) #과목리스트 나오는 상자
         self.Subjectlist.setGeometry(QtCore.QRect(0, 160, 221, 281))
         self.Subjectlist.setObjectName("Subjectlist")
+
+        self.Subjectlist.setEditTriggers(QAbstractItemView.NoEditTriggers)  #edit 금지 모드
 
         testsubject = ('새벽', '아침', '점심', '저녁', '밤')
         timeslot = QtGui.QStandardItemModel()
@@ -432,6 +446,8 @@ class Ui_Dialog(QMainWindow):
         item.setText(_translate("Dialog", "금"))
         item = self.TimeTable.horizontalHeaderItem(5)
         item.setText(_translate("Dialog", "토"))
+        item = self.TimeTable.horizontalHeaderItem(6)
+        item.setText(_translate("Dialog", "일"))
 
         self.TTableLabel.setText(_translate("Dialog", "Time Table"))
         self.SubSearchLabel.setText(_translate("Dialog", "과목검색"))
