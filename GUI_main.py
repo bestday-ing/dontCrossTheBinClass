@@ -480,7 +480,7 @@ class Ui_Dialog(QMainWindow):
         self.ckBox_grd4.stateChanged.connect(self.checkBoxState)
 
         # 슬라이더 리스너
-        self.GradeSlider.valueChanged.connect(self.MoveSlider)
+        self.GradeSlider.sliderReleased.connect(self.MoveSlider)
 
         self.SearchCombo.setItemText(0, _translate("Dialog", "교수명"))
         self.SearchCombo.setItemText(1, _translate("Dialog", "과목명"))
