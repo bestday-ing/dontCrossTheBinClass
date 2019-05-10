@@ -12,13 +12,13 @@ typeCstate = [False, False, False]  # 공학전공 전공기반 기본소양
 query = ""
 callFlag = False
 
-print_subject = []
+timeslot = QtGui.QStandardItemModel()
 
 def getquery():
-    global testsubject
+    timeslot.clear()
     for row in  DataBase.DB.execute(query):
         dataframe =str(row[0]) +'\n'+ str(row[3]+"\n"+row[5])
-        print_subject.append(dataframe)
+        timeslot.appendRow(QtGui.QStandardItem(dataframe))
     DataBase.con.commit()
     return query
 
@@ -401,8 +401,6 @@ class Ui_Dialog(QMainWindow):
 
 # event handler 설치 : 상응하는 버튼에 설치 모듈화 하기 전 테스트로 여기 배치 나중에 다르게 빼도 괜찮음
     def searchBt_pushed(self):  # 검색창 입력
-        timeslot = QtGui.QStandardItemModel()
-        #timeslot.removeRows(0,timeslot.Count())
         comboResult = self.SearchCombo.currentText()  # 콤보박스 입력값
         searchResult = self.SearchTextEdit.toPlainText()  # 검색창 입력값
         gubunResult = self.checkBoxState()  # 구분 체크박스 입력값
@@ -410,8 +408,6 @@ class Ui_Dialog(QMainWindow):
         print("SearchButton Pushed\n교과구분 : " + comboResult + " 검색어 : " + searchResult)
         print("구분 checkbox : " + gubunResult)
         print("학점 선택 : " + str(creditResult))
-        for f in print_subject:
-            timeslot.appendRow(QtGui.QStandardItem(f))
         self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
 
     def loginBt_pushed(self):  # 로그인 팝업창
