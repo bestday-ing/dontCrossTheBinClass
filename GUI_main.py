@@ -495,5 +495,14 @@ class Ui_Dialog(QMainWindow):
         mType = [self.ckBox_major, self.ckBox_basis, self.ckBox_Mbasic]
         mYear = [self.ckBox_grdEtc, self.ckBox_grd1, self.ckBox_grd2, self.ckBox_grd3, self.ckBox_grd4]
 
+        mType[0].setChecked(True)
+        mType[1].setChecked(True)
+        mType[2].setChecked(True)
+
+        mYear[0].setChecked(True)
+        mYear[1].setChecked(True)
+        mYear[2].setChecked(True)
+        mYear[3].setChecked(True)
+        mYear[4].setChecked(True)
 
 
