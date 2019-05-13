@@ -203,6 +203,10 @@ class Ui_Dialog(QMainWindow):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(959, 591)
+        font = QtGui.QFont()
+        font.setFamily("휴먼모음T")
+        font.setUnderline(False)
+        Dialog.setFont(font)
 ### Frame 1
         self.frame1 = QtWidgets.QFrame(Dialog) #frame1은 왼쪽의 타임테이블 있는 프레임
         self.frame1.setGeometry(QtCore.QRect(0, 10, 651, 451))
@@ -211,7 +215,7 @@ class Ui_Dialog(QMainWindow):
         self.frame1.setObjectName("frame1")
 
         self.TimeTable = QtWidgets.QTableWidget(self.frame1) #시간표 테이블
-        self.TimeTable.setGeometry(QtCore.QRect(10, 40, 631, 411))
+        self.TimeTable.setGeometry(QtCore.QRect(15, 40, 631, 411))
         self.TimeTable.setShowGrid(True)
         self.TimeTable.setGridStyle(QtCore.Qt.SolidLine)
         self.TimeTable.setRowCount(26)
@@ -245,9 +249,14 @@ class Ui_Dialog(QMainWindow):
 
         self.TTableLabel = QtWidgets.QLabel(self.frame1) #TimetableLabel
                  # 레이블은 주로 텍스트 상자를 뜻함, 건드릴일 거의 없음
-        self.TTableLabel.setGeometry(QtCore.QRect(30, 0, 501, 41))
+        self.TTableLabel.setGeometry(QtCore.QRect(55, 0, 501, 41))
         self.TTableLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.TTableLabel.setObjectName("TTableLabel")
+        font = QtGui.QFont()
+        font.setFamily("Calisto MT")
+        font.setPointSize(16)
+        font.setUnderline(False)
+        self.TTableLabel.setFont(font)
 
 ### Frame 2
         self.frame2 = QtWidgets.QFrame(Dialog) #frame2는 오른쪽 과목검색있는곳
@@ -256,6 +265,32 @@ class Ui_Dialog(QMainWindow):
         self.frame2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame2.setObjectName("frame2")
 
+        self.GradeSlider = QtWidgets.QSlider(self.frame2)  # 학점 구분 슬라이더
+        self.GradeSlider.setGeometry(QtCore.QRect(41, 28, 221, 22))
+        self.GradeSlider.setMaximumSize(QtCore.QSize(221, 16777215))
+        self.GradeSlider.setMinimum(1)
+        self.GradeSlider.setValue(3)
+        self.GradeSlider.setMaximum(6)
+        self.GradeSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.GradeSlider.setInvertedAppearance(False)
+        self.GradeSlider.setInvertedControls(False)
+        self.GradeSlider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
+        self.GradeSlider.setTickInterval(0)
+        self.GradeSlider.setObjectName("GradeSlider")
+
+        self.SliderLabel = QtWidgets.QLabel(self.frame2) #Slider Label
+        self.SliderLabel.setGeometry(QtCore.QRect(47, 45, 231, 30))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setBold(False)
+        font.setItalic(False)
+        font.setUnderline(False)
+        font.setWeight(50)
+        font.setStrikeOut(False)
+        font.setKerning(True)
+        self.SliderLabel.setFont(font)
+        self.SliderLabel.setObjectName("SliderLabel")
+
         self.Subjectlist = QtWidgets.QListView(self.frame2) #과목리스트 나오는 상자
         self.Subjectlist.setGeometry(QtCore.QRect(7, 160, 270, 281))
         self.Subjectlist.setObjectName("Subjectlist")
@@ -263,24 +298,24 @@ class Ui_Dialog(QMainWindow):
 
 
         self.SubSearchLabel = QtWidgets.QLabel(self.frame2) #과목검색 레이블
-        self.SubSearchLabel.setGeometry(QtCore.QRect(0, 0, 211, 31))
+        self.SubSearchLabel.setGeometry(QtCore.QRect(35, 0, 211, 31))
         self.SubSearchLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.SubSearchLabel.setObjectName("SubSearchLabel")
 
         self.CreditLabel = QtWidgets.QLabel(self.frame2) #학점 레이블
-        self.CreditLabel.setGeometry(QtCore.QRect(6, 29, 30, 20))
+        self.CreditLabel.setGeometry(QtCore.QRect(8, 29, 30, 20))
         self.CreditLabel.setObjectName("CreditLabel")
 
         self.GradeLabel = QtWidgets.QLabel(self.frame2) #학년 레이블
-        self.GradeLabel.setGeometry(QtCore.QRect(6, 53, 30, 20))
+        self.GradeLabel.setGeometry(QtCore.QRect(8, 76, 30, 20))
         self.GradeLabel.setObjectName("GradeLabel")
 
         self.GubunLabel = QtWidgets.QLabel(self.frame2)  # 구분 레이블
-        self.GubunLabel.setGeometry(QtCore.QRect(5, 80, 30, 20))
+        self.GubunLabel.setGeometry(QtCore.QRect(7, 103, 30, 20))
         self.GubunLabel.setObjectName("GubunLabel")
 
         self.GradeLayoutWidget = QtWidgets.QWidget(self.frame2) #학년 Layout의 위젯
-        self.GradeLayoutWidget.setGeometry(QtCore.QRect(40, 50, 231, 31))
+        self.GradeLayoutWidget.setGeometry(QtCore.QRect(40, 71, 231, 31))
         self.GradeLayoutWidget.setObjectName("GradeLayoutWidget")
 
         self.GradeLayout = QtWidgets.QHBoxLayout(self.GradeLayoutWidget) #학년Layout 자체(widget과 다른 것임)
@@ -311,7 +346,7 @@ class Ui_Dialog(QMainWindow):
         self.GradeLayout.addWidget(self.ckBox_grd4)
 
         self.GubunLayoutWidget = QtWidgets.QWidget(self.frame2) #구분,즉 전공,전공기반 같은거 체크박스 들어있는 레이아웃
-        self.GubunLayoutWidget.setGeometry(QtCore.QRect(40, 75, 231, 31))
+        self.GubunLayoutWidget.setGeometry(QtCore.QRect(40, 98, 231, 31))
         self.GubunLayoutWidget.setObjectName("GubunLayoutWidget")
 
         self.GubunLayout = QtWidgets.QHBoxLayout(self.GubunLayoutWidget) #구분 레이아웃
@@ -333,19 +368,6 @@ class Ui_Dialog(QMainWindow):
         self.ckBox_basis = QtWidgets.QCheckBox(self.GubunLayoutWidget) #구분 - 기본소양
         self.ckBox_basis.setObjectName("ckBox_basis")
         self.GubunLayout.addWidget(self.ckBox_basis)
-
-        self.GradeSlider = QtWidgets.QSlider(self.frame2) #학점 구분 슬라이더
-        self.GradeSlider.setGeometry(QtCore.QRect(41, 28, 221, 22))
-        self.GradeSlider.setMaximumSize(QtCore.QSize(221, 16777215))
-        self.GradeSlider.setMinimum(1)
-        self.GradeSlider.setValue(3)
-        self.GradeSlider.setMaximum(6)
-        self.GradeSlider.setOrientation(QtCore.Qt.Horizontal)
-        self.GradeSlider.setInvertedAppearance(False)
-        self.GradeSlider.setInvertedControls(False)
-        self.GradeSlider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
-        self.GradeSlider.setTickInterval(0)
-        self.GradeSlider.setObjectName("GradeSlider")
 
         self.SearchCombo = QtWidgets.QComboBox(self.frame2) # 검색하는 상자 옆에 교수명같은거 있는 combobox
         self.SearchCombo.setGeometry(QtCore.QRect(7, 131, 51, 21))
@@ -465,6 +487,7 @@ class Ui_Dialog(QMainWindow):
         self.GubunLabel.setText(_translate("Dialog", "구분"))
         self.GradeLabel.setText(_translate("Dialog", "학년"))
         self.CreditLabel.setText(_translate("Dialog", "학점"))
+        self.SliderLabel.setText(_translate("Dialog", "1  \t2  \t3  \t  4\t  5\t  6"))
 
         self.ckBox_grdEtc.setText(_translate("Dialog", "*"))
         self.ckBox_grd1.setText(_translate("Dialog", "1"))
