@@ -336,6 +336,7 @@ class Ui_Dialog(QMainWindow):
         self.GradeSlider.setGeometry(QtCore.QRect(41, 28, 221, 22))
         self.GradeSlider.setMaximumSize(QtCore.QSize(221, 16777215))
         self.GradeSlider.setMinimum(1)
+        self.GradeSlider.setValue(3)
         self.GradeSlider.setMaximum(6)
         self.GradeSlider.setOrientation(QtCore.Qt.Horizontal)
         self.GradeSlider.setInvertedAppearance(False)
