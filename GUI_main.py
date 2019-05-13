@@ -1,9 +1,9 @@
+from PyQt5.QtGui import QPalette
 from Crawl import Crawler
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QPoint, Qt, pyqtSlot
 import login_popup
-#import doubleclick_popup
 import Search_lecture       #Table의 좌표를 받아서 검색하는 기능
 import DataBase
 import threading
@@ -208,6 +208,10 @@ class Ui_Dialog(QMainWindow):
         font.setFamily("휴먼모음T")
         font.setUnderline(False)
         Dialog.setFont(font)
+        # palette = QPalette()
+        # palette.setColor(QPalette.Base,Qt.)
+        # Dialog.setPalette(palette)
+
 ### Frame 1
         self.frame1 = QtWidgets.QFrame(Dialog) #frame1은 왼쪽의 타임테이블 있는 프레임
         self.frame1.setGeometry(QtCore.QRect(0, 10, 651, 451))
@@ -222,6 +226,7 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setRowCount(26)
         self.TimeTable.setColumnCount(7)
         self.TimeTable.setObjectName("TimeTable")
+
         self.TimeTable.setEditTriggers(QAbstractItemView.NoEditTriggers)    #Edit 금지 모드
 
 
@@ -242,8 +247,8 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setHorizontalHeaderItem(6, item)
         # 셀 클릭시 row col 출력
         self.TimeTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.TimeTable.cellClicked.connect(Search_lecture.get_clicked_pos)       #단일 cell 선택시 작동하는 함수
-        self.TimeTable.cellEntered.connect(Search_lecture.get_dragged_pos)       #다수의 cell 선택시 작동하는 삼수
+        #self.TimeTable.cellClicked.connect(Search_lecture.get_clicked_pos)       #단일 cell 선택시 작동하는 함수
+        #self.TimeTable.cellEntered.connect(Search_lecture.get_dragged_pos)       #다수의 cell 선택시 작동하는 삼수
         self.TimeTable.cellDoubleClicked.connect(self.get_doubleclicked_pos)
         #self.TimeTable.cellPressed.connect(Search_lecture.reset_table)           #수정 필요
 
@@ -437,6 +442,7 @@ class Ui_Dialog(QMainWindow):
         self.UpdateButton.setGeometry(QtCore.QRect(810, 470, 121, 81))
         self.UpdateButton.setObjectName("UpdateButton")
         #self.pushBt_update.setDisabled(True)
+        self.CateSearchButton.clicked.connect(self.CateSearchBt_pushed)
         self.UpdateButton.clicked.connect(self.updateBt_pushed)
         #########################################################
         #########################################################
@@ -447,6 +453,14 @@ class Ui_Dialog(QMainWindow):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
 # event handler 설치 : 상응하는 버튼에 설치 모듈화 하기 전 테스트로 여기 배치 나중에 다르게 빼도 괜찮음
+    def CateSearchBt_pushed(self):  #카테고리 검색 버튼 클릭
+        selValues = self.TimeTable.selectedIndexes() #timetable에 선택된영역 인덱스값 받아옴
+        cell = list([idx.row(), idx.column()] for idx in selValues) #객체들 리스트화
+        #cell은 2차원 리스트임, 첫번째 선택된 영역의 column값을 받아오려면 cell[0][1]이라고 하면됨
+        txt1 = "selected cells ; {0}".format(cell) #스트링으로
+        msg = QMessageBox.information(self, 'selectedIndexes()...', txt1)
+
+
     def searchBt_pushed(self):  # 검색창 입력
         global searchClickFlag
 
