@@ -208,6 +208,9 @@ class Ui_Dialog(QMainWindow):
         font.setFamily("휴먼모음T")
         font.setUnderline(False)
         Dialog.setFont(font)
+        s = QStyleFactory.create('Fusion')
+        Dialog.setStyle(s)
+
         # palette = QPalette()
         # palette.setColor(QPalette.Base,Qt.)
         # Dialog.setPalette(palette)
@@ -219,6 +222,7 @@ class Ui_Dialog(QMainWindow):
         self.frame1.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame1.setObjectName("frame1")
 
+
         self.TimeTable = QtWidgets.QTableWidget(self.frame1) #시간표 테이블
         self.TimeTable.setGeometry(QtCore.QRect(15, 40, 631, 411))
         self.TimeTable.setShowGrid(True)
@@ -226,6 +230,9 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setRowCount(26)
         self.TimeTable.setColumnCount(7)
         self.TimeTable.setObjectName("TimeTable")
+        s = QStyleFactory.create('Fusion')
+        self.TimeTable.setStyle(s)
+
 
         self.TimeTable.setEditTriggers(QAbstractItemView.NoEditTriggers)    #Edit 금지 모드
 
@@ -273,6 +280,8 @@ class Ui_Dialog(QMainWindow):
         sizePolicy.setHeightForWidth(self.CateSearchButton.sizePolicy().hasHeightForWidth())
         self.CateSearchButton.setSizePolicy(sizePolicy)
         self.CateSearchButton.setObjectName("CateSearchButton")
+        s = QStyleFactory.create('Fusion')
+        self.CateSearchButton.setStyle(s)
 
 ### Frame 2
         self.frame2 = QtWidgets.QFrame(Dialog) #frame2는 오른쪽 과목검색있는곳
@@ -293,6 +302,8 @@ class Ui_Dialog(QMainWindow):
         self.GradeSlider.setTickPosition(QtWidgets.QSlider.TicksBothSides)
         self.GradeSlider.setTickInterval(0)
         self.GradeSlider.setObjectName("GradeSlider")
+        s = QStyleFactory.create('Fusion')
+        self.GradeSlider.setStyle(s)
 
         self.SliderLabel = QtWidgets.QLabel(self.frame2) #Slider Label
         self.SliderLabel.setGeometry(QtCore.QRect(42, 45, 231, 30))
@@ -307,10 +318,13 @@ class Ui_Dialog(QMainWindow):
         self.SliderLabel.setFont(font)
         self.SliderLabel.setObjectName("SliderLabel")
 
+
         self.Subjectlist = QtWidgets.QListView(self.frame2) #과목리스트 나오는 상자
         self.Subjectlist.setGeometry(QtCore.QRect(7, 160, 270, 281))
         self.Subjectlist.setObjectName("Subjectlist")
         self.Subjectlist.setEditTriggers(QAbstractItemView.NoEditTriggers)  #edit 금지 모드
+        s = QStyleFactory.create('Fusion')
+        self.Subjectlist.setStyle(s)
 
 
         self.SubSearchLabel = QtWidgets.QLabel(self.frame2) #과목검색 레이블
@@ -333,6 +347,8 @@ class Ui_Dialog(QMainWindow):
         self.GradeLayoutWidget = QtWidgets.QWidget(self.frame2) #학년 Layout의 위젯
         self.GradeLayoutWidget.setGeometry(QtCore.QRect(40, 71, 231, 31))
         self.GradeLayoutWidget.setObjectName("GradeLayoutWidget")
+        s = QStyleFactory.create('Fusion')
+        self.GradeLayoutWidget.setStyle(s)
 
         self.GradeLayout = QtWidgets.QHBoxLayout(self.GradeLayoutWidget) #학년Layout 자체(widget과 다른 것임)
         self.GradeLayout.setContentsMargins(0, 0, 0, 0)
@@ -344,26 +360,38 @@ class Ui_Dialog(QMainWindow):
         self.ckBox_grdEtc = QtWidgets.QCheckBox(self.GradeLayoutWidget) #학년 체크박스 *표
         self.ckBox_grdEtc.setObjectName("ckBox_grdEtc")
         self.GradeLayout.addWidget(self.ckBox_grdEtc)
+        s = QStyleFactory.create('Fusion')
+        self.ckBox_grdEtc.setStyle(s)
 
         self.ckBox_grd1 = QtWidgets.QCheckBox(self.GradeLayoutWidget) #학년 체크박스 1학년
         self.ckBox_grd1.setObjectName("ckBox_grd1")
         self.GradeLayout.addWidget(self.ckBox_grd1)
+        s = QStyleFactory.create('Fusion')
+        self.ckBox_grd1.setStyle(s)
 
         self.ckBox_grd2 = QtWidgets.QCheckBox(self.GradeLayoutWidget) #학년 체크박스 2학년
         self.ckBox_grd2.setObjectName("ckBox_grd2")
         self.GradeLayout.addWidget(self.ckBox_grd2)
+        s = QStyleFactory.create('Fusion')
+        self.ckBox_grd2.setStyle(s)
 
         self.ckBox_grd3 = QtWidgets.QCheckBox(self.GradeLayoutWidget) #학년 체크박스 3학년
         self.ckBox_grd3.setObjectName("ckBox_grd3")
         self.GradeLayout.addWidget(self.ckBox_grd3)
+        s = QStyleFactory.create('Fusion')
+        self.ckBox_grd3.setStyle(s)
 
         self.ckBox_grd4 = QtWidgets.QCheckBox(self.GradeLayoutWidget) #학년 체크박스 4학년
         self.ckBox_grd4.setObjectName("ckBox_grd4")
         self.GradeLayout.addWidget(self.ckBox_grd4)
+        s = QStyleFactory.create('Fusion')
+        self.ckBox_grd4.setStyle(s)
 
         self.GubunLayoutWidget = QtWidgets.QWidget(self.frame2) #구분,즉 전공,전공기반 같은거 체크박스 들어있는 레이아웃
         self.GubunLayoutWidget.setGeometry(QtCore.QRect(40, 98, 231, 31))
         self.GubunLayoutWidget.setObjectName("GubunLayoutWidget")
+        s = QStyleFactory.create('Fusion')
+        self.GubunLayoutWidget.setStyle(s)
 
         self.GubunLayout = QtWidgets.QHBoxLayout(self.GubunLayoutWidget) #구분 레이아웃
         self.GubunLayout.setContentsMargins(0, 0, 0, 0)
@@ -376,14 +404,20 @@ class Ui_Dialog(QMainWindow):
         self.ckBox_major = QtWidgets.QCheckBox(self.GubunLayoutWidget) #구분 - 전공
         self.ckBox_major.setObjectName("ckBox_major")
         self.GubunLayout.addWidget(self.ckBox_major)
+        s = QStyleFactory.create('Fusion')
+        self.ckBox_major.setStyle(s)
 
         self.ckBox_Mbasic = QtWidgets.QCheckBox(self.GubunLayoutWidget) #구분 - 전공기반
         self.ckBox_Mbasic.setObjectName("ckBox_Mbasic")
         self.GubunLayout.addWidget(self.ckBox_Mbasic)
+        s = QStyleFactory.create('Fusion')
+        self.ckBox_Mbasic.setStyle(s)
 
         self.ckBox_basis = QtWidgets.QCheckBox(self.GubunLayoutWidget) #구분 - 기본소양
         self.ckBox_basis.setObjectName("ckBox_basis")
         self.GubunLayout.addWidget(self.ckBox_basis)
+        s = QStyleFactory.create('Fusion')
+        self.ckBox_basis.setStyle(s)
 
         self.SearchCombo = QtWidgets.QComboBox(self.frame2) # 검색하는 상자 옆에 교수명같은거 있는 combobox
         self.SearchCombo.setGeometry(QtCore.QRect(7, 131, 64, 21))
@@ -396,6 +430,8 @@ class Ui_Dialog(QMainWindow):
         self.SearchCombo.addItem("")
         self.SearchCombo.addItem("")
         self.SearchCombo.addItem("")
+        s = QStyleFactory.create('Fusion')
+        self.SearchCombo.setStyle(s)
 
         self.SearchTextEdit = QtWidgets.QPlainTextEdit(self.frame2) #검색어 입력할 텍스트 상자
         self.SearchTextEdit.setGeometry(QtCore.QRect(73, 131, 145, 21))
@@ -404,6 +440,8 @@ class Ui_Dialog(QMainWindow):
         self.SearchTextEdit.setLineWidth(1)
         self.SearchTextEdit.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.SearchTextEdit.setObjectName("SearchTextEdit")
+        s = QStyleFactory.create('Fusion')
+        self.SearchTextEdit.setStyle(s)
 
         self.SearchButton = QtWidgets.QPushButton(self.frame2) #검색하기 버튼
         self.SearchButton.setGeometry(QtCore.QRect(218, 130, 61, 23))
@@ -413,6 +451,8 @@ class Ui_Dialog(QMainWindow):
         sizePolicy.setHeightForWidth(self.SearchButton.sizePolicy().hasHeightForWidth())
         self.SearchButton.setSizePolicy(sizePolicy)
         self.SearchButton.setObjectName("SearchButton")
+        s = QStyleFactory.create('Fusion')
+        self.SearchButton.setStyle(s)
 
 
 ### Frame 3
@@ -427,9 +467,12 @@ class Ui_Dialog(QMainWindow):
         self.GraduateLabel.setGeometry(QtCore.QRect(20, 0, 771, 21))
         self.GraduateLabel.setObjectName("GraduateLabel")
 
+
         self.LoginButton = QtWidgets.QPushButton(self.frame3) #로그인기능 버튼
         self.LoginButton.setGeometry(QtCore.QRect(320, 40, 111, 32))
         self.LoginButton.setObjectName("LoginButton")
+        s = QStyleFactory.create('Fusion')
+        self.LoginButton.setStyle(s)
 
         self.NeedLoginLabel = QtWidgets.QLabel(self.frame3) #로그인하라는 레이블. 건드릴필요없음
         self.NeedLoginLabel.setGeometry(QtCore.QRect(260, 20, 231, 21))
@@ -441,6 +484,8 @@ class Ui_Dialog(QMainWindow):
         self.UpdateButton = QtWidgets.QPushButton(Dialog)
         self.UpdateButton.setGeometry(QtCore.QRect(810, 470, 121, 81))
         self.UpdateButton.setObjectName("UpdateButton")
+        s = QStyleFactory.create('Fusion')
+        self.UpdateButton.setStyle(s)
         #self.pushBt_update.setDisabled(True)
         self.CateSearchButton.clicked.connect(self.CateSearchBt_pushed)
         self.UpdateButton.clicked.connect(self.updateBt_pushed)
@@ -449,6 +494,8 @@ class Ui_Dialog(QMainWindow):
         self.LoginButton.clicked.connect(self.loginBt_pushed)
         #########################################################
         self.SearchButton.clicked.connect(self.searchBt_pushed)
+        self.Subjectlist.doubleClicked.connect(self.doubleclickList)
+
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
@@ -491,7 +538,14 @@ class Ui_Dialog(QMainWindow):
 
     def get_doubleclicked_pos(self,row,column):
         reply = QMessageBox.information(self, 'Message', "INDEX\n"+"row - "+str(row)+"\ncolumn - "+str(column), QMessageBox.Yes, QMessageBox.Yes)
-        print("Double Click 됨")
+        print(reply)
+
+    def doubleclickList(self): #subjectlist 더블클릭 했을시
+        reply = QMessageBox.information(self, 'Message', self.Subjectlist.currentIndex().data()+" 을(를) 추가하시겠습니까?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        if reply == 16384:
+            print("YES입력")
+        else:
+            print("NO입력")
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
