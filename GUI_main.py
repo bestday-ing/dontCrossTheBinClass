@@ -67,7 +67,7 @@ def execQuery(self):
     searchResult = self.SearchTextEdit.toPlainText()  # 검색창 입력값
 
     #입력창에 아무것도 안 쳤을 때 뭔가 예외 처리를 해줘야 할 듯
-
+    print(query)
     if(searchClickFlag): # 클릭했다면
         if(comboResult =="과목코드"): # 과목코드
             submsg += "code = " + "'" + searchResult + "'"
@@ -76,11 +76,13 @@ def execQuery(self):
         elif (comboResult == "과목명"):
             submsg += "cname = " + "'" + searchResult + "'"
 
+        index = query.rfind("credit")
         # 앞에 클릭된 게 하나로 있다면 and 붙이고
         if (sum(gradeCstate) + sum(typeCstate)): # 앞서 둘 중에 하나라도 클릭이 되어 있다면
             query += " and "
             query += submsg
-        else:
+        else: #credit이 지금은 항상 클릭되는 상태라서 이렇게 해둠,, 변경 사항있으면 바꾸려고 여기를
+            query += " and "
             query += submsg
 
     print(query)
