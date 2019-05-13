@@ -20,6 +20,9 @@ def get_dragged_pos(row,col):     #drag시 선택된 영역 row, col 받아오�
     print('End pos : ' + str(table_x[len(table_x)-1])+
           ' , '+str(table_y[len(table_y)-1]))  #끝   지점
 
+# doubleclick은 GUI_main에 있습니다
+
+
 def reset_table():
     del table_x[:]
     del table_y[:]

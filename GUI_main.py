@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QPoint, Qt, pyqtSlot
 import login_popup
+#import doubleclick_popup
 import Search_lecture       #Table의 좌표를 받아서 검색하는 기능
 import DataBase
 import threading
@@ -243,6 +244,7 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.TimeTable.cellClicked.connect(Search_lecture.get_clicked_pos)       #단일 cell 선택시 작동하는 함수
         self.TimeTable.cellEntered.connect(Search_lecture.get_dragged_pos)       #다수의 cell 선택시 작동하는 삼수
+        self.TimeTable.cellDoubleClicked.connect(self.get_doubleclicked_pos)
         #self.TimeTable.cellPressed.connect(Search_lecture.reset_table)           #수정 필요
 
 
@@ -257,6 +259,15 @@ class Ui_Dialog(QMainWindow):
         font.setPointSize(16)
         font.setUnderline(False)
         self.TTableLabel.setFont(font)
+
+        self.CateSearchButton = QtWidgets.QPushButton(self.frame1) #카테고리 검색하기 버튼
+        self.CateSearchButton.setGeometry(QtCore.QRect(535, 11, 110, 30))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.CateSearchButton.sizePolicy().hasHeightForWidth())
+        self.CateSearchButton.setSizePolicy(sizePolicy)
+        self.CateSearchButton.setObjectName("CateSearchButton")
 
 ### Frame 2
         self.frame2 = QtWidgets.QFrame(Dialog) #frame2는 오른쪽 과목검색있는곳
@@ -370,7 +381,7 @@ class Ui_Dialog(QMainWindow):
         self.GubunLayout.addWidget(self.ckBox_basis)
 
         self.SearchCombo = QtWidgets.QComboBox(self.frame2) # 검색하는 상자 옆에 교수명같은거 있는 combobox
-        self.SearchCombo.setGeometry(QtCore.QRect(7, 131, 51, 21))
+        self.SearchCombo.setGeometry(QtCore.QRect(7, 131, 64, 21))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -382,7 +393,7 @@ class Ui_Dialog(QMainWindow):
         self.SearchCombo.addItem("")
 
         self.SearchTextEdit = QtWidgets.QPlainTextEdit(self.frame2) #검색어 입력할 텍스트 상자
-        self.SearchTextEdit.setGeometry(QtCore.QRect(60, 130, 161, 21))
+        self.SearchTextEdit.setGeometry(QtCore.QRect(73, 131, 145, 21))
         self.SearchTextEdit.setAcceptDrops(True)
         self.SearchTextEdit.setAutoFillBackground(False)
         self.SearchTextEdit.setLineWidth(1)
@@ -390,7 +401,7 @@ class Ui_Dialog(QMainWindow):
         self.SearchTextEdit.setObjectName("SearchTextEdit")
 
         self.SearchButton = QtWidgets.QPushButton(self.frame2) #검색하기 버튼
-        self.SearchButton.setGeometry(QtCore.QRect(220, 130, 61, 23))
+        self.SearchButton.setGeometry(QtCore.QRect(218, 130, 61, 23))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -464,6 +475,10 @@ class Ui_Dialog(QMainWindow):
             crawl.get_major_lecture(self.profile)
             crawl.close()
 
+    def get_doubleclicked_pos(self,row,column):
+        reply = QMessageBox.information(self, 'Message', "INDEX\n"+"row - "+str(row)+"\ncolumn - "+str(column), QMessageBox.Yes, QMessageBox.Yes)
+        print("Double Click 됨")
+
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
@@ -498,6 +513,8 @@ class Ui_Dialog(QMainWindow):
         self.ckBox_major.setText(_translate("Dialog", "전공"))
         self.ckBox_Mbasic.setText(_translate("Dialog", "전공기반"))
         self.ckBox_basis.setText(_translate("Dialog", "기본소양"))
+
+        self.CateSearchButton.setText(_translate("Dialog", "카테고리 검색"))
 
         # 체크 박스 리스너 마냥,, -- def checkBoxState로 처리
         self.ckBox_major.stateChanged.connect(self.checkBoxState)
