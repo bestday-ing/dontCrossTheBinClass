@@ -495,6 +495,8 @@ class Ui_Dialog(QMainWindow):
         #########################################################
         self.SearchButton.clicked.connect(self.searchBt_pushed)
         self.Subjectlist.doubleClicked.connect(self.doubleclickList)
+        # 슬라이더 리스너
+        self.GradeSlider.sliderReleased.connect(self.MoveSlider)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -541,15 +543,21 @@ class Ui_Dialog(QMainWindow):
         print(reply)
 
     def doubleclickList(self): #subjectlist 더블클릭 했을시
-        reply = QMessageBox.information(self, 'Message', self.Subjectlist.currentIndex().data()+" 을(를) 추가하시겠습니까?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        currentdata = self.Subjectlist.currentIndex().data()
+        datalist = currentdata.split("\n")
+        reply = QMessageBox.information(self, 'Message', currentdata+" 을(를) 추가하시겠습니까?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if reply == 16384:
             print("YES입력")
+            item = QtWidgets.QTableWidgetItem()
+            item.setText(datalist[0])
+            self.TimeTable.setItem(0,0,item)
         else:
             print("NO입력")
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+
         item = self.TimeTable.horizontalHeaderItem(0)
         item.setText(_translate("Dialog", "월"))
         item = self.TimeTable.horizontalHeaderItem(1)
@@ -595,8 +603,7 @@ class Ui_Dialog(QMainWindow):
         self.ckBox_grd3.stateChanged.connect(self.checkBoxState)
         self.ckBox_grd4.stateChanged.connect(self.checkBoxState)
 
-        # 슬라이더 리스너
-        self.GradeSlider.sliderReleased.connect(self.MoveSlider)
+
 
         self.SearchCombo.setItemText(0, _translate("Dialog", "교수명"))
         self.SearchCombo.setItemText(1, _translate("Dialog", "과목명"))
@@ -607,6 +614,7 @@ class Ui_Dialog(QMainWindow):
         self.NeedLoginLabel.setText(_translate("Dialog", " 학점을 보기 위해서는 로그인이 필요합니다."))
         self.NeedLoginLabel.resize(self.NeedLoginLabel.sizeHint())        # 라벨 내용만큼 자동 리사이징
         self.UpdateButton.setText(_translate("Dialog", "강의\n업데이트"))
+
 
         mType = [self.ckBox_major, self.ckBox_basis, self.ckBox_Mbasic]
         mYear = [self.ckBox_grdEtc, self.ckBox_grd1, self.ckBox_grd2, self.ckBox_grd3, self.ckBox_grd4]
