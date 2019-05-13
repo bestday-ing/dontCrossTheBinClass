@@ -5,21 +5,93 @@ from PyQt5.QtCore import QPoint, Qt, pyqtSlot
 import login_popup
 import Search_lecture       #Table의 좌표를 받아서 검색하는 기능
 import DataBase
+import threading
 
-creditCstate = [False]
+creditCstate = [False] #이거 없애고 디폴트 값을 3으로 두는 게 나을 듯
 gradeCstate = [False, False, False, False, False]  # * 1 2 3 4
 typeCstate = [False, False, False]  # 공학전공 전공기반 기본소양
 query = ""
-callFlag = False
+searchClickFlag = False
 
 timeslot = QtGui.QStandardItemModel()
 
-def getquery():
+
+
+def execQuery(self):
+    global creditCstate
+    global gradeCstate
+    global typeCstate
+    global query
+    global searchClickFlag
+
+    gradeName = ["'*'", "'1'", "'2'", "'3'", "'4'"]
+    typeName = ["'공학전공'", "'전공기반'", "'기본소양'"]
+
+    query = "select * from Course where "
+    # type click state check
+    orN = sum(typeCstate) - 1
+    if (sum(typeCstate) > 0):
+        query += "("
+        for i in range(len(typeCstate)):
+            if typeCstate[i]:
+                query += "type = " + typeName[i]
+                if orN > 0:
+                    query += ' or '
+                    orN -= 1
+        query += ")"
+
+    if (sum(typeCstate) > 0 and sum(gradeCstate) > 0):  # 앞에 하나라도 클릭된 게 있고 뒤에도 클릭된 게 있다면
+        query += " and "
+    # grade click state check
+    orN = sum(gradeCstate) - 1
+    if (sum(gradeCstate) > 0):
+        query += "("
+        for i in range(len(gradeCstate)):
+            if gradeCstate[i]:
+                query += "year = " + gradeName[i]
+                if orN > 0:
+                    query += ' or '
+                    orN -= 1
+        query += ")"
+    # move slider state check
+    creditResult = self.GradeSlider.value()  # 학점 슬라이더 입력값
+
+    if (sum(gradeCstate) + sum(typeCstate)):  # 앞서 둘 중에 하나라도 클릭이 되어 있다면
+        query += " and "
+    # 클릭이 아무것도 안되어 있다면
+    query += "credit = " + str(creditResult)
+
+    # search value and state check
+    submsg =""
+    comboResult = self.SearchCombo.currentText()  # 콤보박스 입력값
+    searchResult = self.SearchTextEdit.toPlainText()  # 검색창 입력값
+
+    #입력창에 아무것도 안 쳤을 때 뭔가 예외 처리를 해줘야 할 듯
+
+    if(searchClickFlag): # 클릭했다면
+        if(comboResult =="과목코드"): # 과목코드
+            submsg += "code = " + "'" + searchResult + "'"
+        if (comboResult == "교수명"):
+           submsg += "pname = " + "'" + searchResult + "'"
+        elif (comboResult == "과목명"):
+            submsg += "cname = " + "'" + searchResult + "'"
+
+        # 앞에 클릭된 게 하나로 있다면 and 붙이고
+        if (sum(gradeCstate) + sum(typeCstate)): # 앞서 둘 중에 하나라도 클릭이 되어 있다면
+            query += " and "
+            query += submsg
+        else:
+            query += submsg
+
+    print(query)
+
+    self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
     timeslot.clear()
     for row in  DataBase.DB.execute(query):
         dataframe =str(row[0]) +'\n'+ str(row[3]+"\n"+row[5])
         timeslot.appendRow(QtGui.QStandardItem(dataframe))
     DataBase.con.commit()
+
     return query
 
 class Ui_Dialog(QMainWindow):
@@ -30,6 +102,9 @@ class Ui_Dialog(QMainWindow):
         self.setFixedSize(self.size())  # 창 크기 고정
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # 윈도우 레이아웃 제거
         self.profile = -1
+        # DBwokrer = threading.Thread(target=execQuery(), args=(self))  # checking 용도
+        # DBwokrer.daemon = True  # Daemon Thread
+        # DBwokrer.start()
 
 
     def center(self):
@@ -68,7 +143,7 @@ class Ui_Dialog(QMainWindow):
         global query
         global callFlag
 
-        query = "select * from Course where "
+        # query = "select * from Course where "
         if self.ckBox_major.isChecked():
             typeCstate[0] = True
         else:
@@ -83,17 +158,6 @@ class Ui_Dialog(QMainWindow):
             typeCstate[2] = True
         else:
             typeCstate[2] = False
-
-        orN = sum(typeCstate) - 1
-        if(sum(typeCstate)>0):
-            query += "("
-            for i in range (len(typeCstate)):
-                if typeCstate[i]:
-                    query += "type = " + typeName[i]
-                    if orN > 0:
-                        query += ' or '
-                        orN -= 1
-            query += ")"
 
 
         if self.ckBox_grdEtc.isChecked():
@@ -121,34 +185,7 @@ class Ui_Dialog(QMainWindow):
         else:
             gradeCstate[4] = False
 
-        if(sum(typeCstate)>0 and sum(gradeCstate)>0): #앞에 하나라도 클릭된 게 있고 뒤에도 클릭된 게 있다면
-            query += " and "
-
-        orN = sum(gradeCstate) - 1
-        if(sum(gradeCstate)>0):
-            query += "("
-            for i in range (len(gradeCstate)):
-                if gradeCstate[i]:
-                    query += "year = " + gradeName[i]
-                    if orN > 0:
-                        query += ' or '
-                        orN -= 1
-            query += ")"
-
-            if(creditCstate[0]):
-                callFlag = True
-                query += self.MoveSlider() # submsg 받아옴
-
-        totalClickSum = sum(gradeCstate) + sum(typeCstate)
-        if(totalClickSum == 0 ):
-            query = "select * from Course"
-            if(creditCstate[0]):
-                return self.MoveSlider()
-
-
-        print(getquery())
-
-        return query
+        execQuery(self)
 
     def MoveSlider(self):
         global query
@@ -156,34 +193,8 @@ class Ui_Dialog(QMainWindow):
         global typeCstate
         global creditCstate
         global callFlag
+        execQuery(self)
 
-        submsg =""
-        size = self.GradeSlider.value()
-        creditCstate[0] = True
-
-        if(sum(gradeCstate) + sum(typeCstate)): # 앞서 하나라도 클릭이 되어 있다면
-            submsg += " and "
-            submsg += "credit = " + str(size)
-            index = query.rfind("credit")
-            if (index > 0): # 앞서 credit 검색이 존재한다면
-                temp = query.rsplit("credit", 1)
-                query = temp[0]
-                query += "credit = " + str(size)
-            else: #존재하지 않는다면
-                temp = query.rsplit(";", 1)
-                query = temp[0]
-                query += submsg
-        else: #클릭이 아무것도 안되어 있다면
-            query = "select * from Course where " + "credit = " + str(size)
-
-
-        # print(size) return에서 size도 뺀 상황
-        #  print(submsg)
-        if(callFlag):
-            callFlag = False
-            return submsg
-        else :
-            print(getquery())
 
 
 
@@ -401,13 +412,11 @@ class Ui_Dialog(QMainWindow):
 
 # event handler 설치 : 상응하는 버튼에 설치 모듈화 하기 전 테스트로 여기 배치 나중에 다르게 빼도 괜찮음
     def searchBt_pushed(self):  # 검색창 입력
-        comboResult = self.SearchCombo.currentText()  # 콤보박스 입력값
-        searchResult = self.SearchTextEdit.toPlainText()  # 검색창 입력값
-        gubunResult = self.checkBoxState()  # 구분 체크박스 입력값
-        creditResult = self.MoveSlider()  # 학점 슬라이더 입력값
-        print("SearchButton Pushed\n교과구분 : " + comboResult + " 검색어 : " + searchResult)
-        print("구분 checkbox : " + gubunResult)
-        print("학점 선택 : " + str(creditResult))
+        global searchClickFlag
+
+        searchClickFlag = True
+        execQuery(self)
+        searchClickFlag = False
         self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
 
     def loginBt_pushed(self):  # 로그인 팝업창
