@@ -56,11 +56,11 @@ def execQuery(self):
         query += ")"
     # move slider state check
     creditResult = self.GradeSlider.value()  # 학점 슬라이더 입력값
-
-    if (sum(gradeCstate) + sum(typeCstate)):  # 앞서 둘 중에 하나라도 클릭이 되어 있다면
-        query += " and "
-    # 클릭이 아무것도 안되어 있다면
-    query += "credit = " + str(creditResult)
+    if (creditResult != 0):
+        if (sum(gradeCstate) + sum(typeCstate)):  # 앞서 둘 중에 하나라도 클릭이 되어 있다면
+            query += " and "
+        # 클릭이 아무것도 안되어 있다면
+        query += "credit = " + str(creditResult)
 
     # search value and state check
     submsg =""
@@ -228,6 +228,10 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setShowGrid(True)
         self.TimeTable.setGridStyle(QtCore.Qt.SolidLine)
         self.TimeTable.setRowCount(26)
+        self.TimeTable.setVerticalHeaderLabels(("09:00;09:30;10:00;10:30;11:00;11:30;"
+                                                "12:00;12:30;13:00;13:30;14:00;14:30;"
+                                                "15:00;15:30;16:00;16:30;17:00;17:30;"
+                                                "18:00;18:30;19:00;19:30;20:00;20:30;21:00;21:30").split(";"))
         self.TimeTable.setColumnCount(7)
         self.TimeTable.setObjectName("TimeTable")
         s = QStyleFactory.create('Fusion')
@@ -516,7 +520,6 @@ class Ui_Dialog(QMainWindow):
         searchClickFlag = True
         execQuery(self)
         searchClickFlag = False
-        self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
 
     def loginBt_pushed(self):  # 로그인 팝업창
         print("Login Btn pressed")
