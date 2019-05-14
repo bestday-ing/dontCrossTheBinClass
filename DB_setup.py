@@ -3,11 +3,19 @@ from selenium.webdriver.support.ui import Select
 import sqlite3
 import platform
 
+def CreateDataBase() :
+    DB.execute('DROP TABLE IF EXISTS Course;')
+    DB.execute('DROP TABLE IF EXISTS Time_INDEX;')
+    DB.execute('CREATE TABLE IF NOT EXISTS Course(code VARCHAR(15) PRIMARY KEY, type TEXT, \
+                year SMALLINT, cname TEXT, credit SMALLINT, pname TEXT, room TEXT, etc TEXT);')
+    DB.execute('CREATE TABLE IF NOT EXISTS Time_INDEX(time_id INTEGER PRIMARY KEY AUTOINCREMENT,\
+                code VARCHAR(15) REFERENCES Course(code), tindex int);')
+    con.commit()
+
 def ParsingTime(code, Time_ROW):
     if(Time_ROW == ''):
         return -1
     time_arr = list()
-    ##print(TT)
     temp = Time_ROW.split('\n')
     print(temp)
     for j in range(len(temp)):  # 배열 길이만큼 j번 돌기
@@ -75,9 +83,6 @@ def ParsingTime(code, Time_ROW):
                 row = returnROW(k)
                 time = row * 7 + col
                 time_arr.append(time)
-    #time_str = time_str.rstrip(',')  # 마지막에 콤마(,) 하나 떼기
-    #print(time_arr)  # 음수는 0교시 혹은 다른 예외의 경우
-    #print(code)
     INSERT_TIME_INDEX(code, time_arr)
     return
 def returnROW(single_time):
@@ -149,10 +154,6 @@ def INSERT_TIME_INDEX(code, ctime = []) :
             DB.execute("INSERT OR IGNORE INTO Time_INDEX (code, tindex) values(?, ?);", (code, ctime[i]))
     con.commit()
 
-def select_Search_by_ID(id, find):  # id : html id 태그, find : 타겟
-    select = Select(driver.find_element_by_id(id))
-    select.select_by_visible_text(find)
-
 def SELECT_db():
     for row in DB.execute("SELECT * FROM Course"):
         print(row)
@@ -169,14 +170,11 @@ con = sqlite3.connect(DB_Path)
 DB = con.cursor()
 #######################################
 
-def crawled(dept,major):
-    driver.get('http://my.knu.ac.kr/stpo/stpo/cour/listLectPln/list.action')
-    select_Search_by_ID('mainDiv', '대학')
-    select_Search_by_ID('sub02', dept)
-    select_Search_by_ID('sub2', major)
-    driver.find_element_by_id('doSearch').click()
+def select_Search_by_ID(id, find):  # id : html id 태그, find : 타겟
+    select = Select(driver.find_element_by_id(id))
+    select.select_by_visible_text(find)
 
-
+def crawled():
     cTable = driver.find_elements_by_tag_name('tr')
     TupleClass = {'code' : 'th4', 'gubun' : 'th2', 'year' : 'th1', 'cname' : 'th5',
                  'credit' : 'th6', 'pname' : 'th9', 'room' : 'th11' ,'etc' : 'th16'}
@@ -191,17 +189,40 @@ def crawled(dept,major):
             Tuple[2] = 0
         Tuple[2] = int(Tuple[2])
         Tuple[4] = int(Tuple[4])
-        #print('Tuple 넣기 이전')
         INSERT(Tuple)
-        # print(Tuple[6]))
-        #Time_ROW = null
         ParsingTime(Tuple[0], Table_row.find_element_by_class_name('th10').text)
 
         Tuple.clear()
 
-crawled('IT대학', '전자공학부 모바일공학전공')
-crawled('IT대학', '컴퓨터학부 글로벌소프트웨어융합전공')
-crawled('IT대학', '핀테크전공')
+CreateDataBase()
+driver.get('http://my.knu.ac.kr/stpo/stpo/cour/listLectPln/list.action')
+select_Search_by_ID('mainDiv', '대학')
 
-SELECT_db()
+cat1 = driver.find_element_by_id('sub02')
+cat1 = cat1.find_elements_by_tag_name('option')
+
+all_major = [[0 for i in range(0)] for j in range(21)]
+
+for i in range(len(cat1)):
+    dept = cat1[i]
+    if(dept.text == '==상주캠퍼스=='):
+        break
+    #print('=====' + dept.text + '=====')
+    select_Search_by_ID('sub02', dept.text)     # sub02 id값 dept.text로 선택
+    all_major[i].append(dept.text)
+
+    cat2 = driver.find_element_by_id('sub2')
+    cat2 = cat2.find_elements_by_tag_name('option')
+    for major in cat2:
+        #print('---' + major.text)
+        select_Search_by_ID('sub2', major.text)
+        if(major.text == '컴퓨터학부' or major.text == '컴퓨터학부 글로벌소프트웨어융합전공'):
+             continue
+        all_major[i].append(major.text)
+
+print(all_major)
+        # driver.find_element_by_id('doSearch').click()
+        # crawled()
+
+# SELECT_db()
 driver.close()
