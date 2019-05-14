@@ -298,7 +298,7 @@ class Ui_Dialog(QMainWindow):
         self.GradeSlider.setGeometry(QtCore.QRect(41, 28, 221, 22))
         self.GradeSlider.setMaximumSize(QtCore.QSize(221, 16777215))
         self.GradeSlider.setMinimum(0) #1에서 0으로 수정 0은 모든 학점을 말하는것
-        self.GradeSlider.setValue(3)
+        self.GradeSlider.setValue(0)
         self.GradeSlider.setMaximum(6)
         self.GradeSlider.setOrientation(QtCore.Qt.Horizontal)
         self.GradeSlider.setInvertedAppearance(False)
@@ -581,7 +581,7 @@ class Ui_Dialog(QMainWindow):
         self.GubunLabel.setText(_translate("Dialog", "구분"))
         self.GradeLabel.setText(_translate("Dialog", "학년"))
         self.CreditLabel.setText(_translate("Dialog", "학점"))
-        self.SliderLabel.setText(_translate("Dialog", " *         1          2         3         4          5         6"))
+        self.SliderLabel.setText(_translate("Dialog", " All         1          2         3         4          5         6"))
 
         self.ckBox_grdEtc.setText(_translate("Dialog", "*"))
         self.ckBox_grd1.setText(_translate("Dialog", "1"))
