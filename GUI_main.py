@@ -60,7 +60,11 @@ def execQuery(self):
         if (sum(gradeCstate) + sum(typeCstate)):  # 앞서 둘 중에 하나라도 클릭이 되어 있다면
             query += " and "
         # 클릭이 아무것도 안되어 있다면
-        query += "credit = " + str(creditResult)
+        if(creditResult == 5):
+         query += "credit > " + str(4)
+        else:
+         query += "credit = " + str(creditResult)
+
 
     # search value and state check
     submsg =""
@@ -299,7 +303,7 @@ class Ui_Dialog(QMainWindow):
         self.GradeSlider.setMaximumSize(QtCore.QSize(221, 16777215))
         self.GradeSlider.setMinimum(0) #1에서 0으로 수정 0은 모든 학점을 말하는것
         self.GradeSlider.setValue(0)
-        self.GradeSlider.setMaximum(6)
+        self.GradeSlider.setMaximum(5)
         self.GradeSlider.setOrientation(QtCore.Qt.Horizontal)
         self.GradeSlider.setInvertedAppearance(False)
         self.GradeSlider.setInvertedControls(False)
@@ -581,7 +585,7 @@ class Ui_Dialog(QMainWindow):
         self.GubunLabel.setText(_translate("Dialog", "구분"))
         self.GradeLabel.setText(_translate("Dialog", "학년"))
         self.CreditLabel.setText(_translate("Dialog", "학점"))
-        self.SliderLabel.setText(_translate("Dialog", " All         1          2         3         4          5         6"))
+        self.SliderLabel.setText(_translate("Dialog", " All          1           2           3           4            5+"))
 
         self.ckBox_grdEtc.setText(_translate("Dialog", "*"))
         self.ckBox_grd1.setText(_translate("Dialog", "1"))
