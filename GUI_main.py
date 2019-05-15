@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QPalette
+from PyQt5.QtGui import QPalette, QBrush, QColor, QFont
 from Crawl import Crawler
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
@@ -12,7 +12,7 @@ gradeCstate = [False, False, False, False, False]  # * 1 2 3 4
 typeCstate = [False, False, False]  # 공학전공 전공기반 기본소양
 query = ""
 searchClickFlag = False
-
+colorcount=0;
 timeslot = QtGui.QStandardItemModel()
 
 
@@ -93,8 +93,10 @@ def execQuery(self):
 
     self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
     timeslot.clear()
+    dataframe = ""
     for row in  DataBase.DB.execute(query):
         dataframe =str(row[0]) +'\n'+ str(row[3]+"\n"+row[5])
+        #dataframe = dataframe + str(row)
         timeslot.appendRow(QtGui.QStandardItem(dataframe))
     DataBase.con.commit()
 
@@ -129,14 +131,14 @@ class Ui_Dialog(QMainWindow):
         self.oldPos = event.globalPos()
 
     # Key 입력 이벤트
-    def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Control:
-            temp_x = Search_lecture.table_x
-            temp_y = Search_lecture.table_y
-            print(temp_x)
-            print(temp_y)
-        if event.key() == Qt.Key_Escape:        #ESC로 윈도우 종료 이벤트
-            self.close()
+    # def keyPressEvent(self, event):
+    #     if event.key() == Qt.Key_Control:
+    #         temp_x = Search_lecture.table_x
+    #         temp_y = Search_lecture.table_y
+    #         print(temp_x)
+    #         print(temp_y)
+    #     if event.key() == Qt.Key_Escape:        #ESC로 윈도우 종료 이벤트
+    #         self.close()
 
 
     def checkBoxState(self): #누를 때 마다 실시간으로 반응하기 위함
@@ -546,14 +548,30 @@ class Ui_Dialog(QMainWindow):
         print(reply)
 
     def doubleclickList(self): #subjectlist 더블클릭 했을시
+        colorList = [
+                     [[255,69,0],[0,0,0]], #orange
+                     [[255,218,185],[0,0,0]], #sal sak
+                     [[128,128,128],[0,0,0]], #gray
+                     [[188,143,143],[0,0,0]], #rosybrown
+                     [[255,20,147],[0,0,0]],#deeppink
+                     [[135,206,250],[0,0,0]],#lightskyblue
+                     [[128,0,0],[0,0,0]], #navy
+                     [[128,128,0],[0,0,0]] #olive
+                     ]
+        global colorcount
         currentdata = self.Subjectlist.currentIndex().data()
         datalist = currentdata.split("\n")
         reply = QMessageBox.information(self, 'Message', currentdata+" 을(를) 추가하시겠습니까?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if reply == 16384:
             print("YES입력")
             item = QtWidgets.QTableWidgetItem()
-            item.setText(datalist[0])
+            item.setText(datalist[1])
             self.TimeTable.setItem(0,0,item)
+            myitem = self.TimeTable.item(0, 0)
+            myitem.setBackground(QBrush(QColor(colorList[colorcount][0][0],colorList[colorcount][0][1],colorList[colorcount][0][2])))
+            myitem.setForeground(QBrush(QColor(colorList[colorcount][1][0],colorList[colorcount][1][1],colorList[colorcount][1][2])))
+            myitem.setFont(QFont('SansSerif'))
+            colorcount=(colorcount+1)%len(colorList)
         else:
             print("NO입력")
 
