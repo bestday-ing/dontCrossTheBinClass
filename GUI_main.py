@@ -4,7 +4,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QPoint, Qt, pyqtSlot
 import login_popup
-import Search_lecture       #Table의 좌표를 받아서 검색하는 기능
 import DataBase
 import threading
 
@@ -262,10 +261,7 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setHorizontalHeaderItem(6, item)
         # 셀 클릭시 row col 출력
         self.TimeTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        #self.TimeTable.cellClicked.connect(Search_lecture.get_clicked_pos)       #단일 cell 선택시 작동하는 함수
-        #self.TimeTable.cellEntered.connect(Search_lecture.get_dragged_pos)       #다수의 cell 선택시 작동하는 삼수
         self.TimeTable.cellDoubleClicked.connect(self.get_doubleclicked_pos)
-        #self.TimeTable.cellPressed.connect(Search_lecture.reset_table)           #수정 필요
 
 
 
