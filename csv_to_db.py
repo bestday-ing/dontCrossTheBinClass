@@ -26,8 +26,8 @@ f_major.close()
 
 
 '''
-교양과목 수정
-'''
+교양과목 수정     #수정해야합니다
+
 f_liberal_arts = open('liberalarts.csv','r',encoding='utf-8')
 out_liberal_arts = open('lib_mod.csv', 'w', encoding='utf-8', newline='')
 
@@ -45,3 +45,4 @@ for line in rdr_l:
 #print(dataset2)
 
 f_liberal_arts.close()
+'''
