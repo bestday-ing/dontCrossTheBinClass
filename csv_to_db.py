@@ -12,8 +12,8 @@ from pandas import DataFrame
 # .drop등 명령어로 특정부분 삭제 가능
 
 
-f_major = open('major.csv','r',encoding='utf-8')
-out_major = open('major_mod.csv', 'w', encoding='utf-8' ,newline='')
+f_major = open('major.csv','r',encoding='utf-8')                            #Input 전공 파일 이름
+out_major = open('major_mod.csv', 'w', encoding='utf-8' ,newline='')        #Output 전공 파일 이름
 rdr_m = csv.reader(f_major)
 wr_m = csv.writer(out_major)
 
@@ -31,28 +31,26 @@ f_major.close()
 
 
 '''
-교양과목 수정     #수정해야합니다
-
-#교양 csv파일은 형태가 달라요 학년, 구분 모두 NULL로 표시되어있어 학년 - *, 구분 - 교양 
-#분할해서 읽을 경우 정보도 이상하게 읽어와서 전부 읽은 이후에 다시 적어야할듯
+교양과목 수정     #구현했수다
+'''
 
 
 count = 0
-f_liberal_arts = open('lib.csv','r',encoding='utf-8')
-out_liberal_arts = open('lib_mod.csv', 'w', encoding='utf-8', newline='')
+f_liberal_arts = open('lib.csv','r',encoding='utf-8')                           #Input 교양 파일 이름
+out_liberal_arts = open('lib_mod.csv', 'w', encoding='utf-8', newline='')      #Output 교양 파일 이름
 
 rdr_l = csv.reader(f_liberal_arts)
 wr_l = csv.writer(out_liberal_arts)
 
-#wr_l.writerow(['전공']+['교과코드-구분']+['과목명']+['학점']+['담당교수']+['시간']+['강의실'])
+wr_l.writerow(['학년']+['전공']+['교과코드-구분']+['과목명']+['학점']+['담당교수']+['시간']+['강의실']+['강좌관리과'])
 
 for line in rdr_l:
-    #if(line[0]== '*'or line[0]=='1'or line[0]=='2' or line[0]=='3'or line[0]=='4'):
-     wr_l.writerow(line)
+    if(not line[0] and not line[1] and line[2]):
+        line[0]='*'
+        line[1]='교양'
+        wr_l.writerow((line[0],line[1],line[2],line[3],line[4],line[7],line[8],line[9],line[13]))
 
-temp = pd.read_csv('./lib_mod.csv',sep =',')
-
-print(temp)
+dataset2 = pd.read_csv('./lib_mod.csv',sep =',')
+print(dataset2)
 
 f_liberal_arts.close()
-'''
