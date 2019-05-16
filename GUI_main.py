@@ -131,14 +131,14 @@ class Ui_Dialog(QMainWindow):
         self.oldPos = event.globalPos()
 
     # Key 입력 이벤트
-    # def keyPressEvent(self, event):
+    def keyPressEvent(self, event):
     #     if event.key() == Qt.Key_Control:
     #         temp_x = Search_lecture.table_x
     #         temp_y = Search_lecture.table_y
     #         print(temp_x)
     #         print(temp_y)
-    #     if event.key() == Qt.Key_Escape:        #ESC로 윈도우 종료 이벤트
-    #         self.close()
+         if event.key() == Qt.Key_Escape:        #ESC로 윈도우 종료 이벤트
+             self.close()
 
 
     def checkBoxState(self): #누를 때 마다 실시간으로 반응하기 위함
