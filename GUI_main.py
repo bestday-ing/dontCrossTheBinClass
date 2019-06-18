@@ -53,6 +53,7 @@ def execQuery(self):
                     query += ' or '
                     orN -= 1
         query += ")"
+
     # move slider state check
     creditResult = self.GradeSlider.value()  # 학점 슬라이더 입력값
     if (creditResult != 0):
@@ -60,9 +61,13 @@ def execQuery(self):
             query += " and "
         # 클릭이 아무것도 안되어 있다면
         if(creditResult == 5):
-         query += "credit > " + str(4)
+            query += "credit > " + str(4)
         else:
-         query += "credit = " + str(creditResult)
+            query += "credit = " + str(creditResult)
+
+
+    if(creditResult + (sum(gradeCstate)+sum(typeCstate)) == 0):
+        query = "select * from Course "
 
 
     # search value and state check
@@ -70,9 +75,13 @@ def execQuery(self):
     comboResult = self.SearchCombo.currentText()  # 콤보박스 입력값
     searchResult = self.SearchTextEdit.toPlainText()  # 검색창 입력값
 
-    #입력창에 아무것도 안 쳤을 때 뭔가 예외 처리를 해줘야 할 듯
     print(query)
+
+
     if(searchClickFlag): # 클릭했다면
+        if(searchResult == submsg): # 입력창에 아무것도 안 쳤을 때 예외 처리
+            QMessageBox.information(self, "error", "검색어를 입력해주세요")
+            return query
         if(comboResult =="과목코드"): # 과목코드
             submsg += "code = " + "'" + searchResult + "'"
         if (comboResult == "교수명"):
@@ -599,7 +608,7 @@ class Ui_Dialog(QMainWindow):
         self.GubunLabel.setText(_translate("Dialog", "구분"))
         self.GradeLabel.setText(_translate("Dialog", "학년"))
         self.CreditLabel.setText(_translate("Dialog", "학점"))
-        self.SliderLabel.setText(_translate("Dialog", " All          1           2           3           4            5+"))
+        self.SliderLabel.setText(_translate("Dialog", " All        1         2         3         4          5+"))
 
         self.ckBox_grdEtc.setText(_translate("Dialog", "*"))
         self.ckBox_grd1.setText(_translate("Dialog", "1"))
