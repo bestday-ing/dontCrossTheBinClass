@@ -81,11 +81,11 @@ def execQuery(self, sel_code=[]):
             QMessageBox.information(self, "error", "검색어를 입력해주세요")
             return query
         if(comboResult =="과목코드"): # 과목코드
-            submsg += "code = " + "'" + searchResult + "'"
+            submsg += "code LIKE " + "'%" + searchResult + "%'"
         if (comboResult == "교수명"):
-           submsg += "pname = " + "'" + searchResult + "'"
+           submsg += "pname LIKE " + "'%" + searchResult + "%'"
         elif (comboResult == "과목명"):
-            submsg += "cname = " + "'" + searchResult + "'"
+            submsg += "cname LIKE " + "'%" + searchResult + "%'"
 
         index = query.rfind("credit")
         # 앞에 클릭된 게 하나로 있다면 and 붙이고
