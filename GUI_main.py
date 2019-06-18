@@ -16,7 +16,7 @@ timeslot = QtGui.QStandardItemModel()
 
 
 
-def execQuery(self):
+def execQuery(self, sel_code=[]):
     global creditCstate
     global gradeCstate
     global typeCstate
@@ -74,7 +74,7 @@ def execQuery(self):
     comboResult = self.SearchCombo.currentText()  # 콤보박스 입력값
     searchResult = self.SearchTextEdit.toPlainText()  # 검색창 입력값
 
-    print(query)
+    # print(query)
 
 
     if(searchClickFlag): # 클릭했다면
@@ -96,6 +96,14 @@ def execQuery(self):
         else: #credit이 지금은 항상 클릭되는 상태라서 이렇게 해둠,, 변경 사항있으면 바꾸려고 여기를
             query += " and "
             query += submsg
+
+    if(len(sel_code) > 0):
+        query += " and ("       # 마지막으로 선택한 영역의 강좌들 쿼리문에 추가
+        for sel_cur in sel_code:
+            query += "code = '" + sel_cur + "'"
+            if(sel_cur != sel_code[len(sel_code)- 1]):
+                query += " or "
+        query += ")"
 
     print(query)
 
@@ -547,9 +555,17 @@ class Ui_Dialog(QMainWindow):
             crawl.get_major_lecture(self.profile)
             crawl.close()
 
-    def get_doubleclicked_pos(self,row,column):
-        reply = QMessageBox.information(self, 'Message', "INDEX\n"+"row - "+str(row)+"\ncolumn - "+str(column), QMessageBox.Yes, QMessageBox.Yes)
-        print(reply)
+    def get_doubleclicked_pos(self,row,col):        # 시간표 테이블 영역을 더블클릭 할 시,
+        tin = row * 7 + col
+        index_query = "SELECT code FROM Time_INDEX WHERE tindex=" + str(tin)    # 쿼리문
+        codes = list()
+        # print(index_query)
+        for row in DataBase.DB.execute(index_query):
+            codes.append(row[0])        # codes: 해당 시간에 있는 과목코드들 배열
+        # print(codes)
+        execQuery(self, codes)      # 해당 시간에 있는 과목코드들을 인자로 넘겨줌
+        #reply = QMessageBox.information(self, 'Message', "INDEX\n"+"row - "+str(row)+"\ncolumn - "+str(col), QMessageBox.Yes, QMessageBox.Yes)
+        #print(reply)
 
     def doubleclickList(self): #subjectlist 더블클릭 했을시
         colorList = [
@@ -568,7 +584,7 @@ class Ui_Dialog(QMainWindow):
         datalist = currentdata.split("\n")      # 과목코드: datalist[0]
         reply = QMessageBox.information(self, 'Message', currentdata+" 을(를) 추가하시겠습니까?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if reply == 16384:
-            print("YES클릭")
+            # print("YES클릭")
             index_query = "SELECT tindex FROM Time_INDEX WHERE code='" + datalist[0] + "'"
             # print(index_query)
             tline = list()      # output으로 받아오는 타임 인덱스 값들의 배열
@@ -582,14 +598,13 @@ class Ui_Dialog(QMainWindow):
                 row = (t_cur - col) / 7
                 self.TimeTable.setItem(row, col, item)      # 인덱스 좌표값
                 myitem = self.TimeTable.item(row, col)
-                print('myitem 받아오기 완료')
                 myitem.setBackground(QBrush(QColor(colorList[colorcount][0][0], colorList[colorcount][0][1], colorList[colorcount][0][2])))
                 myitem.setForeground(QBrush(QColor(colorList[colorcount][1][0], colorList[colorcount][1][1], colorList[colorcount][1][2])))
                 # myitem.setFont(QFont('휴먼모음T'))
             colorcount = (colorcount + 1) % len(colorList)
 
-        else:
-            print("NO클릭")
+        # else:
+            # print("NO클릭")
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
