@@ -1,18 +1,17 @@
-from PyQt5.QtGui import QPalette, QBrush, QColor, QFont
+from PyQt5.QtGui import QPalette
 from Crawl import Crawler
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QPoint, Qt, pyqtSlot
 import login_popup
 import DataBase
-import threading
 
 creditCstate = [False] #이거 없애고 디폴트 값을 3으로 두는 게 나을 듯
 gradeCstate = [False, False, False, False, False]  # * 1 2 3 4
 typeCstate = [False, False, False]  # 공학전공 전공기반 기본소양
 query = ""
 searchClickFlag = False
-colorcount=0;
+
 timeslot = QtGui.QStandardItemModel()
 
 
@@ -93,10 +92,8 @@ def execQuery(self):
 
     self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
     timeslot.clear()
-    dataframe = ""
     for row in  DataBase.DB.execute(query):
-        dataframe =str(row[0]) +'\n'+ str(row[3]+"\n"+row[5])
-        #dataframe = dataframe + str(row)
+        dataframe =str(row[0]) +'\n'+ str(row[3]+"\n"+row[5])               # 화면 오른쪽에 강의 목록 띄우기
         timeslot.appendRow(QtGui.QStandardItem(dataframe))
     DataBase.con.commit()
 
@@ -132,13 +129,8 @@ class Ui_Dialog(QMainWindow):
 
     # Key 입력 이벤트
     def keyPressEvent(self, event):
-    #     if event.key() == Qt.Key_Control:
-    #         temp_x = Search_lecture.table_x
-    #         temp_y = Search_lecture.table_y
-    #         print(temp_x)
-    #         print(temp_y)
-         if event.key() == Qt.Key_Escape:        #ESC로 윈도우 종료 이벤트
-             self.close()
+        if event.key() == Qt.Key_Escape:        #ESC로 윈도우 종료 이벤트
+            self.close()
 
 
     def checkBoxState(self): #누를 때 마다 실시간으로 반응하기 위함
@@ -263,7 +255,10 @@ class Ui_Dialog(QMainWindow):
         self.TimeTable.setHorizontalHeaderItem(6, item)
         # 셀 클릭시 row col 출력
         self.TimeTable.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        #self.TimeTable.cellClicked.connect(Search_lecture.get_clicked_pos)       #단일 cell 선택시 작동하는 함수
+        #self.TimeTable.cellEntered.connect(Search_lecture.get_dragged_pos)       #다수의 cell 선택시 작동하는 삼수
         self.TimeTable.cellDoubleClicked.connect(self.get_doubleclicked_pos)
+        #self.TimeTable.cellPressed.connect(Search_lecture.reset_table)           #수정 필요
 
 
 
@@ -548,32 +543,26 @@ class Ui_Dialog(QMainWindow):
         print(reply)
 
     def doubleclickList(self): #subjectlist 더블클릭 했을시
-        colorList = [
-                     [[255,69,0],[0,0,0]], #orange
-                     [[255,218,185],[0,0,0]], #sal sak
-                     [[128,128,128],[0,0,0]], #gray
-                     [[188,143,143],[0,0,0]], #rosybrown
-                     [[255,20,147],[0,0,0]],#deeppink
-                     [[135,206,250],[0,0,0]],#lightskyblue
-                     [[128,0,0],[0,0,0]], #navy
-                     [[128,128,0],[0,0,0]] #olive
-                     ]
-        global colorcount
         currentdata = self.Subjectlist.currentIndex().data()
-        datalist = currentdata.split("\n")
+        datalist = currentdata.split("\n")      # 과목코드: datalist[0]
         reply = QMessageBox.information(self, 'Message', currentdata+" 을(를) 추가하시겠습니까?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if reply == 16384:
-            print("YES입력")
-            item = QtWidgets.QTableWidgetItem()
-            item.setText(datalist[1])
-            self.TimeTable.setItem(0,0,item)
-            myitem = self.TimeTable.item(0, 0)
-            myitem.setBackground(QBrush(QColor(colorList[colorcount][0][0],colorList[colorcount][0][1],colorList[colorcount][0][2])))
-            myitem.setForeground(QBrush(QColor(colorList[colorcount][1][0],colorList[colorcount][1][1],colorList[colorcount][1][2])))
-            myitem.setFont(QFont('SansSerif'))
-            colorcount=(colorcount+1)%len(colorList)
+            print("YES클릭")
+            index_query = "SELECT tindex FROM Time_INDEX WHERE code='" + datalist[0] + "'"
+            # print(index_query)
+            tline = list()      # output으로 받아오는 타임 인덱스 값들의 배열
+            for row in DataBase.DB.execute(index_query):
+                tline.append(row[0])
+            # print(tline)
+
+            for t_cur in tline:
+                item = QtWidgets.QTableWidgetItem()
+                item.setText(datalist[1])
+                col = t_cur % 7
+                row = (t_cur - col) / 7
+                self.TimeTable.setItem(row, col, item)      # 인덱스 좌표값
         else:
-            print("NO입력")
+            print("NO클릭")
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
