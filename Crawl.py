@@ -36,11 +36,21 @@ class Crawler:
         self.driver.find_element_by_id('loginBtn').click()
         try:
             self.driver.get('http://my.knu.ac.kr/stpo/stpo/stud/infoMngt/basisMngt/list.action')
-            profile = {'sname': '', 'sdept': '', 'smajor': ''}
+            profile = {'sname': '', 'sdept': '', 'smajor': '', 'total': '','major':'','base':'','fill_lib':'','lib':''}
             profile['sname'] = self.driver.find_element_by_id('kor_nm').get_attribute('value')
             stemp = str(self.driver.find_elements_by_tag_name('td')[8].text).split(' ')
             profile['sdept'] = stemp[2]
             profile['smajor'] = stemp[3]
+
+            self.driver.get('http://my.knu.ac.kr/stpo/stpo/scor/certRecEnq/list.action')
+            status = self.driver.find_element_by_id("listCertRecStatses")
+            status = status.find_elements_by_tag_name("tr")
+            status = status[11]
+            profile['total'] = status.find_element_by_class_name('total').text
+            profile['major'] = status.find_element_by_class_name('col51').text
+            profile['base'] = status.find_element_by_class_name('col52').text
+            profile['fill_lib'] = status.find_element_by_class_name('col53').text
+            profile['lib'] = status.find_element_by_class_name('col01').text
             return profile
         except:
             alert = self.driver.switch_to_alert()  # alert 창으로 전환

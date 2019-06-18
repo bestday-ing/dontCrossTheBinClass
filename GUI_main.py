@@ -105,7 +105,7 @@ def execQuery(self, sel_code=[]):
                 query += " or "
         query += ")"
 
-    print(query)
+    # print(query)
 
     self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
     timeslot.clear()
@@ -550,10 +550,10 @@ class Ui_Dialog(QMainWindow):
         if (self.profile == -1):
             QMessageBox.information(self, "Error", "로그인이 필요한 기능입니다")
             # print('로그인 하지 않은 상태입니다.')
-        else:
-            crawl = Crawler()
-            crawl.get_major_lecture(self.profile)
-            crawl.close()
+        # else:
+            # crawl = Crawler()
+            # crawl.get_major_lecture(self.profile)
+            # crawl.close()
 
     def get_doubleclicked_pos(self,row,col):        # 시간표 테이블 영역을 더블클릭 할 시,
         tin = row * 7 + col
