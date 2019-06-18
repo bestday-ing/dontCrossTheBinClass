@@ -80,6 +80,8 @@ def execQuery(self, sel_code=[]):
         if(searchResult == submsg): # 입력창에 아무것도 안 쳤을 때 예외 처리
             QMessageBox.information(self, "error", "검색어를 입력해주세요")
             return query
+
+
         if(comboResult =="과목코드"): # 과목코드
             submsg += "code LIKE " + "'%" + searchResult + "%'"
         if (comboResult == "교수명"):
@@ -93,7 +95,9 @@ def execQuery(self, sel_code=[]):
             query += " and "
             query += submsg
         else: #credit이 지금은 항상 클릭되는 상태라서 이렇게 해둠,, 변경 사항있으면 바꾸려고 여기를
-            query += " and "
+            # query += " and "
+            if (creditResult + (sum(gradeCstate) + sum(typeCstate)) == 0):
+                query += "where "
             query += submsg
 
     if(len(sel_code) > 0):
@@ -104,7 +108,7 @@ def execQuery(self, sel_code=[]):
                 query += " or "
         query += ")"
 
-    # print(query)
+    print(query)
 
     self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
     timeslot.clear()
