@@ -13,8 +13,7 @@ query = ""
 searchClickFlag = False
 colorcount = 0
 timeslot = QtGui.QStandardItemModel()
-
-
+table_map = [[0 for col in range(7)] for row in range(27)]
 
 def execQuery(self, sel_code=[]):
     global creditCstate
@@ -415,10 +414,6 @@ class Ui_Dialog(QMainWindow):
         self.GubunLayout.setContentsMargins(0, 0, 0, 0)
         self.GubunLayout.setObjectName("GubunLayout")
 
-
-
-
-
         self.ckBox_major = QtWidgets.QCheckBox(self.GubunLayoutWidget) #구분 - 전공
         self.ckBox_major.setObjectName("ckBox_major")
         self.GubunLayout.addWidget(self.ckBox_major)
@@ -492,9 +487,49 @@ class Ui_Dialog(QMainWindow):
         s = QStyleFactory.create('Fusion')
         self.LoginButton.setStyle(s)
 
-        self.NeedLoginLabel = QtWidgets.QLabel(self.frame3) #로그인하라는 레이블. 건드릴필요없음
+        self.NeedLoginLabel = QtWidgets.QLabel(self.frame3) # 로그인하라는 레이블 레이아웃. 건드릴필요없음
         self.NeedLoginLabel.setGeometry(QtCore.QRect(260, 20, 231, 21))
         self.NeedLoginLabel.setObjectName("NeedLoginLabel")
+
+        self.F3MajorLabel = QtWidgets.QLabel(self.frame3)  # 공학전공 라벨
+        self.F3MajorLabel.setGeometry(QtCore.QRect(30, 40, 231, 21))
+        self.F3MajorLabel.setObjectName("F3MajorLabel")
+
+        self.F3MajorLabelNum = QtWidgets.QLabel(self.frame3)  # 공학전공 학점
+        self.F3MajorLabelNum.setGeometry(QtCore.QRect(90, 40, 231, 21))
+        self.F3MajorLabelNum.setObjectName("F3MajorLabelNum")
+
+        self.F3GibanLabel = QtWidgets.QLabel(self.frame3)  # 전공기반 라벨
+        self.F3GibanLabel.setGeometry(QtCore.QRect(190, 40, 231, 21))
+        self.F3GibanLabel.setObjectName("F3GibanLabel")
+
+        self.F3GibanLabelNum = QtWidgets.QLabel(self.frame3)  # 전공기반 학점
+        self.F3GibanLabelNum.setGeometry(QtCore.QRect(250, 40, 231, 21))
+        self.F3GibanLabelNum.setObjectName("F3GibanLabelNum")
+
+        self.F3BasisLabel = QtWidgets.QLabel(self.frame3)  # 기본소양 라벨
+        self.F3BasisLabel.setGeometry(QtCore.QRect(350, 40, 231, 21))
+        self.F3BasisLabel.setObjectName("F3BasisLabel")
+
+        self.F3BasisLabelNum = QtWidgets.QLabel(self.frame3)  # 기본소양 학점
+        self.F3BasisLabelNum.setGeometry(QtCore.QRect(410, 40, 231, 21))
+        self.F3BasisLabelNum.setObjectName("F3BasisLabelNum")
+
+        self.F3GyoyangLabel = QtWidgets.QLabel(self.frame3)  # 교양 라벨
+        self.F3GyoyangLabel.setGeometry(QtCore.QRect(510, 40, 231, 21))
+        self.F3GyoyangLabel.setObjectName("F3GyoyangLabel")
+
+        self.F3GyoyangLabelNum = QtWidgets.QLabel(self.frame3)  # 교양 학점
+        self.F3GyoyangLabelNum.setGeometry(QtCore.QRect(570, 40, 231, 21))
+        self.F3GyoyangLabelNum.setObjectName("F3GyoyangLabelNum")
+
+        self.F3TotalLabel = QtWidgets.QLabel(self.frame3)  # 전체 학점 라벨
+        self.F3TotalLabel.setGeometry(QtCore.QRect(670, 40, 231, 21))
+        self.F3TotalLabel.setObjectName("F3TotalLabel")
+
+        self.F3TotalLabelNum = QtWidgets.QLabel(self.frame3)  # 전체 학점 num
+        self.F3TotalLabelNum.setGeometry(QtCore.QRect(720, 40, 231, 21))
+        self.F3TotalLabelNum.setObjectName("F3TotalLabelNum")
 
         self.UpdateButton = QtWidgets.QPushButton(Dialog) #업데이트 버튼
         self.UpdateButton.setGeometry(QtCore.QRect(810, 470, 121, 81))
@@ -545,6 +580,17 @@ class Ui_Dialog(QMainWindow):
             print(self.profile)
             self.NeedLoginLabel.setText(self.profile['sname'] + '님 환영합니다')
             self.LoginButton.hide()
+            # sname : sdept : smajor : total : major : base : fill_lib : lib
+            self.F3MajorLabel.setText("공학전공")
+            self.F3MajorLabelNum.setText(self.profile['major'] + " / 75")
+            self.F3GibanLabel.setText("전공기반")
+            self.F3GibanLabelNum.setText(self.profile['base'] + " / 24")
+            self.F3BasisLabel.setText("기본소양")
+            self.F3BasisLabelNum.setText(self.profile['fill_lib'] + " / 15")
+            self.F3GyoyangLabel.setText("교양")
+            self.F3GyoyangLabelNum.setText(self.profile['lib'])
+            self.F3TotalLabel.setText("전체")
+            self.F3TotalLabelNum.setText(self.profile['total'] + " / 150")
 
     def updateBt_pushed(self):
         if (self.profile == -1):
@@ -554,18 +600,38 @@ class Ui_Dialog(QMainWindow):
             # crawl = Crawler()
             # crawl.get_major_lecture(self.profile)
             # crawl.close()
+    def deleteBlock(self, cname):
+        global table_map    # 전역변수 table_map 가져오기
+        # print('블록 삭제 시작: '+cname)
+        for col in range(7):
+            for row in range(27):
+                if(table_map[row][col] == cname):   # 해당 과목 이름을 찾아서 싹다 삭제 시퀀스
+                    item = QtWidgets.QTableWidgetItem()
+                    item.setText('')
+                    self.TimeTable.setItem(row, col, item)  # 인덱스 좌표값
+                    myitem = self.TimeTable.item(row, col)
+                    myitem.setBackground(QBrush(QColor(255, 255, 255)))
+                    myitem.setForeground(QBrush(QColor(0, 0, 0)))
+                    table_map[row][col] = 0
 
     def get_doubleclicked_pos(self,row,col):        # 시간표 테이블 영역을 더블클릭 할 시,
-        tin = row * 7 + col
-        index_query = "SELECT code FROM Time_INDEX WHERE tindex=" + str(tin)    # 쿼리문
-        codes = list()
-        # print(index_query)
-        for row in DataBase.DB.execute(index_query):
-            codes.append(row[0])        # codes: 해당 시간에 있는 과목코드들 배열
-        # print(codes)
-        execQuery(self, codes)      # 해당 시간에 있는 과목코드들을 인자로 넘겨줌
-        #reply = QMessageBox.information(self, 'Message', "INDEX\n"+"row - "+str(row)+"\ncolumn - "+str(col), QMessageBox.Yes, QMessageBox.Yes)
-        #print(reply)
+        global table_map    # 전역 table_map 가져오기
+        if(table_map[int(row)][int(col)] != 0):     # 시간표 테이블 영역이 0이 아니면, 이미 강의가 들어있고 해당테이블에 있는 과목 삭제
+            selected_block = self.TimeTable.item(row, col)
+            reply = QMessageBox.information(self,'과목삭제', selected_block.text()+' 과목을\n삭제하시겠습까?',QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+            if reply == 16384:      # 삭제 버튼을 눌렀을때
+                self.deleteBlock(selected_block.text())   # 테이블에서 해당 과목 이름 싹다 삭제
+        else:
+            tin = row * 7 + col
+            index_query = "SELECT code FROM Time_INDEX WHERE tindex=" + str(tin)    # 쿼리문
+            codes = list()
+            # print(index_query)
+            for i in DataBase.DB.execute(index_query):
+                codes.append(i[0])        # codes: 해당 시간에 있는 과목코드들 배열
+            # print(codes)
+            execQuery(self, codes)      # 해당 시간에 있는 과목코드들을 인자로 넘겨줌
+            #reply = QMessageBox.information(self, 'Message', "INDEX\n"+"row - "+str(row)+"\ncolumn - "+str(col), QMessageBox.Yes, QMessageBox.Yes)
+            #print(reply)
 
     def doubleclickList(self): #subjectlist 더블클릭 했을시
         colorList = [
@@ -579,10 +645,11 @@ class Ui_Dialog(QMainWindow):
             [[128, 128, 0], [0, 0, 0]]  # olive
         ]
         global colorcount   # 테이블 색깔 채우기
-        
+        global table_map
+
         currentdata = self.Subjectlist.currentIndex().data()
-        datalist = currentdata.split("\n")      # 과목코드: datalist[0]
-        reply = QMessageBox.information(self, 'Message', currentdata+" 을(를) 추가하시겠습니까?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        datalist = currentdata.split("\n")      # 과목코드: datalist[0] | 과목명: datalist[1]
+        reply = QMessageBox.information(self, '과목추가', currentdata+" 을(를) 추가하시겠습니까?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if reply == 16384:
             # print("YES클릭")
             index_query = "SELECT tindex FROM Time_INDEX WHERE code='" + datalist[0] + "'"
@@ -592,15 +659,20 @@ class Ui_Dialog(QMainWindow):
                 tline.append(row[0])
             # print(tline)
             for t_cur in tline:
-                item = QtWidgets.QTableWidgetItem()
-                item.setText(datalist[1])
                 col = t_cur % 7
                 row = (t_cur - col) / 7
-                self.TimeTable.setItem(row, col, item)      # 인덱스 좌표값
-                myitem = self.TimeTable.item(row, col)
-                myitem.setBackground(QBrush(QColor(colorList[colorcount][0][0], colorList[colorcount][0][1], colorList[colorcount][0][2])))
-                myitem.setForeground(QBrush(QColor(colorList[colorcount][1][0], colorList[colorcount][1][1], colorList[colorcount][1][2])))
-                # myitem.setFont(QFont('휴먼모음T'))
+                if(table_map[int(row)][int(col)] != 0):         # 해당 테이블에 이미 강좌가 들어있다면 경고메세지 출력
+                    QMessageBox.warning(self,'앗!','이미 해당시간에\n강좌가 있습니다.',QMessageBox.Yes)
+                    break
+                else:                                           # 테이블에 강좌가 들어있지 않다면 안에 넣기
+                    item = QtWidgets.QTableWidgetItem()         # ITEM 오브젝트 만들기
+                    item.setText(datalist[1])
+                    self.TimeTable.setItem(row, col, item)      # 인덱스 좌표값
+                    table_map[int(row)][int(col)] = datalist[1]           # 테이블 맵에 추가되는 과목명 넣기
+                    myitem = self.TimeTable.item(row, col)
+                    myitem.setBackground(QBrush(QColor(colorList[colorcount][0][0], colorList[colorcount][0][1], colorList[colorcount][0][2])))
+                    myitem.setForeground(QBrush(QColor(colorList[colorcount][1][0], colorList[colorcount][1][1], colorList[colorcount][1][2])))
+                    # myitem.setFont(QFont('휴먼모음T'))
             colorcount = (colorcount + 1) % len(colorList)
 
         # else:
@@ -661,7 +733,7 @@ class Ui_Dialog(QMainWindow):
         self.SearchCombo.setItemText(1, _translate("Dialog", "과목명"))
         self.SearchCombo.setItemText(2, _translate("Dialog", "과목코드"))
         self.SearchButton.setText(_translate("Dialog", "검색"))
-        self.GraduateLabel.setText(_translate("Dialog", "졸업학점/ 이수학점"))
+        self.GraduateLabel.setText(_translate("Dialog", "이수학점 / 졸업학점"))
         self.LoginButton.setText(_translate("Dialog", "로그인"))
         self.NeedLoginLabel.setText(_translate("Dialog", " 학점을 보기 위해서는 로그인이 필요합니다."))
         self.NeedLoginLabel.resize(self.NeedLoginLabel.sizeHint())        # 라벨 내용만큼 자동 리사이징
