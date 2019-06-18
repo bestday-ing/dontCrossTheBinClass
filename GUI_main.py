@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QPalette
+from PyQt5.QtGui import QPalette, QBrush, QColor, QFont
 from Crawl import Crawler
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
@@ -11,7 +11,7 @@ gradeCstate = [False, False, False, False, False]  # * 1 2 3 4
 typeCstate = [False, False, False]  # 공학전공 전공기반 기본소양
 query = ""
 searchClickFlag = False
-
+colorcount = 0
 timeslot = QtGui.QStandardItemModel()
 
 
@@ -552,6 +552,18 @@ class Ui_Dialog(QMainWindow):
         print(reply)
 
     def doubleclickList(self): #subjectlist 더블클릭 했을시
+        colorList = [
+            [[255, 69, 0], [0, 0, 0]],  # orange
+            [[255, 218, 185], [0, 0, 0]],  # sal sak
+            [[128, 128, 128], [0, 0, 0]],  # gray
+            [[188, 143, 143], [0, 0, 0]],  # rosybrown
+            [[255, 20, 147], [0, 0, 0]],  # deeppink
+            [[135, 206, 250], [0, 0, 0]],  # lightskyblue
+            [[128, 0, 0], [0, 0, 0]],  # navy
+            [[128, 128, 0], [0, 0, 0]]  # olive
+        ]
+        global colorcount   # 테이블 색깔 채우기
+        
         currentdata = self.Subjectlist.currentIndex().data()
         datalist = currentdata.split("\n")      # 과목코드: datalist[0]
         reply = QMessageBox.information(self, 'Message', currentdata+" 을(를) 추가하시겠습니까?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
@@ -563,13 +575,19 @@ class Ui_Dialog(QMainWindow):
             for row in DataBase.DB.execute(index_query):
                 tline.append(row[0])
             # print(tline)
-
             for t_cur in tline:
                 item = QtWidgets.QTableWidgetItem()
                 item.setText(datalist[1])
                 col = t_cur % 7
                 row = (t_cur - col) / 7
                 self.TimeTable.setItem(row, col, item)      # 인덱스 좌표값
+                myitem = self.TimeTable.item(row, col)
+                print('myitem 받아오기 완료')
+                myitem.setBackground(QBrush(QColor(colorList[colorcount][0][0], colorList[colorcount][0][1], colorList[colorcount][0][2])))
+                myitem.setForeground(QBrush(QColor(colorList[colorcount][1][0], colorList[colorcount][1][1], colorList[colorcount][1][2])))
+                # myitem.setFont(QFont('휴먼모음T'))
+            colorcount = (colorcount + 1) % len(colorList)
+
         else:
             print("NO클릭")
 
