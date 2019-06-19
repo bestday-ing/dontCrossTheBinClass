@@ -17,7 +17,7 @@ class Dialog(QtWidgets.QDialog):
         mainLayout.addWidget(self.status)
         mainLayout.addWidget(self.formGroupBox)
         mainLayout.addWidget(buttonBox)
-        self.setWindowTitle("GUI TEST") # 공백으로 수정
+        self.setWindowTitle("로그인") # 공백으로 수정
 
     def createFormGroupBox(self, dinput):
         layout = QtWidgets.QFormLayout()

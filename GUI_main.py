@@ -127,6 +127,7 @@ class Ui_Dialog(QMainWindow):
         self.setFixedSize(self.size())  # 창 크기 고정
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)  # 윈도우 레이아웃 제거
         self.profile = -1
+        self.add_Credit = [0,0,0,0]   # 공학전공, 전공기반, 기본소양, 교양
         # DBwokrer = threading.Thread(target=execQuery(), args=(self))  # checking 용도
         # DBwokrer.daemon = True  # Daemon Thread
         # DBwokrer.start()
@@ -480,10 +481,9 @@ class Ui_Dialog(QMainWindow):
         self.frame3.setLineWidth(1)
         self.frame3.setObjectName("frame3")
 
-        self.GraduateLabel = QtWidgets.QLabel(self.frame3) #졸업학점/이수학점 레이블. 건드릴필요없음
-        self.GraduateLabel.setGeometry(QtCore.QRect(20, 0, 771, 21))
+        self.GraduateLabel = QtWidgets.QLabel(self.frame3) #이수학점/좋업학점 레이블. 건드릴필요없음
+        self.GraduateLabel.setGeometry(QtCore.QRect(20, 5, 771, 21))
         self.GraduateLabel.setObjectName("GraduateLabel")
-
 
         self.LoginButton = QtWidgets.QPushButton(self.frame3) #로그인기능 버튼
         self.LoginButton.setGeometry(QtCore.QRect(320, 40, 111, 32))
@@ -524,15 +524,15 @@ class Ui_Dialog(QMainWindow):
         self.F3GyoyangLabel.setObjectName("F3GyoyangLabel")
 
         self.F3GyoyangLabelNum = QtWidgets.QLabel(self.frame3)  # 교양 학점
-        self.F3GyoyangLabelNum.setGeometry(QtCore.QRect(570, 40, 231, 21))
+        self.F3GyoyangLabelNum.setGeometry(QtCore.QRect(550, 40, 231, 21))
         self.F3GyoyangLabelNum.setObjectName("F3GyoyangLabelNum")
 
         self.F3TotalLabel = QtWidgets.QLabel(self.frame3)  # 전체 학점 라벨
-        self.F3TotalLabel.setGeometry(QtCore.QRect(670, 40, 231, 21))
+        self.F3TotalLabel.setGeometry(QtCore.QRect(620, 40, 231, 21))
         self.F3TotalLabel.setObjectName("F3TotalLabel")
 
         self.F3TotalLabelNum = QtWidgets.QLabel(self.frame3)  # 전체 학점 num
-        self.F3TotalLabelNum.setGeometry(QtCore.QRect(720, 40, 231, 21))
+        self.F3TotalLabelNum.setGeometry(QtCore.QRect(670, 40, 231, 21))
         self.F3TotalLabelNum.setObjectName("F3TotalLabelNum")
 
         self.UpdateButton = QtWidgets.QPushButton(Dialog) #업데이트 버튼
@@ -566,10 +566,8 @@ class Ui_Dialog(QMainWindow):
         txt1 = "selected cells ; {0}".format(cell) #스트링으로
         msg = QMessageBox.information(self, 'selectedIndexes()...', txt1)
 
-
     def searchBt_pushed(self):  # 검색창 입력
         global searchClickFlag
-
         searchClickFlag = True
         execQuery(self)
         searchClickFlag = False
@@ -584,17 +582,27 @@ class Ui_Dialog(QMainWindow):
             print(self.profile)
             self.NeedLoginLabel.setText(self.profile['sname'] + '님 환영합니다')
             self.LoginButton.hide()
-            # sname : sdept : smajor : total : major : base : fill_lib : lib
-            self.F3MajorLabel.setText("공학전공")
-            self.F3MajorLabelNum.setText(self.profile['major'] + " / 75")
-            self.F3GibanLabel.setText("전공기반")
-            self.F3GibanLabelNum.setText(self.profile['base'] + " / 24")
-            self.F3BasisLabel.setText("기본소양")
-            self.F3BasisLabelNum.setText(self.profile['fill_lib'] + " / 15")
-            self.F3GyoyangLabel.setText("교양")
-            self.F3GyoyangLabelNum.setText(self.profile['lib'])
-            self.F3TotalLabel.setText("전체")
-            self.F3TotalLabelNum.setText(self.profile['total'] + " / 150")
+            self.update_credit()
+
+    def update_credit(self):
+        # sname : sdept : smajor : total : major : base : fill_lib : lib
+        # 이수+추가(+추가학점) / 졸업요건 형태
+        major = int(self.profile['major'])
+        basis = int(self.profile['base'])
+        fill_lib = int(self.profile['fill_lib'])
+        lib = int(self.profile['lib'])
+        total = int(self.profile['total'])
+
+        self.F3MajorLabel.setText("공학전공")
+        self.F3MajorLabelNum.setText(str(major+self.add_Credit[0]) + "(+"+ str(self.add_Credit[0]) +")" + "/75")
+        self.F3GibanLabel.setText("전공기반")
+        self.F3GibanLabelNum.setText(str(basis+self.add_Credit[1]) + "(+"+ str(self.add_Credit[1]) +")" + "/24")
+        self.F3BasisLabel.setText("기본소양")
+        self.F3BasisLabelNum.setText(str(fill_lib+self.add_Credit[2]) + "(+"+ str(self.add_Credit[2]) +")" + "/15")
+        self.F3GyoyangLabel.setText("교양")
+        self.F3GyoyangLabelNum.setText(str(lib+self.add_Credit[3]) + "(+"+ str(self.add_Credit[3]) +")")
+        self.F3TotalLabel.setText("전체")
+        self.F3TotalLabelNum.setText(str(total+self.add_Credit[0]) + "(+"+ str(sum(self.add_Credit)) +")" +  "/150")
 
     def updateBt_pushed(self):
         if (self.profile == -1):
@@ -606,6 +614,7 @@ class Ui_Dialog(QMainWindow):
             # crawl.close()
     def deleteBlock(self, cname):
         global table_map    # 전역변수 table_map 가져오기
+        credit_query = "SELECT type,credit FROM Course WHERE cname='" + cname + "'"
         # print('블록 삭제 시작: '+cname)
         for col in range(7):
             for row in range(27):
@@ -617,6 +626,17 @@ class Ui_Dialog(QMainWindow):
                     myitem.setBackground(QBrush(QColor(255, 255, 255)))
                     myitem.setForeground(QBrush(QColor(0, 0, 0)))
                     table_map[row][col] = 0
+        for i in DataBase.DB.execute(credit_query):
+            if (i[0] == "공학전공"):
+                self.add_Credit[0] -= i[1]
+            elif (i[0] == "전공기반"):
+                self.add_Credit[1] -= i[1]
+            elif (i[0] == "기본소양"):
+                self.add_Credit[2] -= i[1]
+            else:
+                self.add_Credit[3] -= i[1]
+            self.update_credit()
+            break
 
     def get_doubleclicked_pos(self,row,col):        # 시간표 테이블 영역을 더블클릭 할 시,
         global table_map    # 전역 table_map 가져오기
@@ -656,7 +676,9 @@ class Ui_Dialog(QMainWindow):
         reply = QMessageBox.information(self, '과목추가', currentdata+" 을(를) 추가하시겠습니까?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
         if reply == 16384:
             # print("YES클릭")
+            credit_flag = True
             index_query = "SELECT tindex FROM Time_INDEX WHERE code='" + datalist[0] + "'"
+            credit_query = "SELECT type,credit FROM Course WHERE code='" + datalist[0] + "'"
             # print(index_query)
             tline = list()      # output으로 받아오는 타임 인덱스 값들의 배열
             for row in DataBase.DB.execute(index_query):
@@ -667,6 +689,7 @@ class Ui_Dialog(QMainWindow):
                 row = (t_cur - col) / 7
                 if(table_map[int(row)][int(col)] != 0):         # 해당 테이블에 이미 강좌가 들어있다면 경고메세지 출력
                     QMessageBox.warning(self,'앗!','이미 해당시간에\n강좌가 있습니다.',QMessageBox.Yes)
+                    credit_flag = False
                     break
                 else:                                           # 테이블에 강좌가 들어있지 않다면 안에 넣기
                     item = QtWidgets.QTableWidgetItem()         # ITEM 오브젝트 만들기
@@ -677,6 +700,18 @@ class Ui_Dialog(QMainWindow):
                     myitem.setBackground(QBrush(QColor(colorList[colorcount][0][0], colorList[colorcount][0][1], colorList[colorcount][0][2])))
                     myitem.setForeground(QBrush(QColor(colorList[colorcount][1][0], colorList[colorcount][1][1], colorList[colorcount][1][2])))
                     # myitem.setFont(QFont('휴먼모음T'))
+            if(credit_flag):            # 과목을 성공적으로 추가 시켰을 경우에만
+                for i in DataBase.DB.execute(credit_query):  # 과목 구분, 학점 들고와서 확인 및 add_credit에 추가
+                    if (i[0] == "공학전공"):
+                        self.add_Credit[0] += i[1]
+                    elif (i[0] == "전공기반"):
+                        self.add_Credit[1] += i[1]
+                    elif (i[0] == "기본소양"):
+                        self.add_Credit[2] += i[1]
+                    else:
+                        self.add_Credit[3] += i[1]
+                    self.update_credit()
+                    break
             colorcount = (colorcount + 1) % len(colorList)
 
         # else:
