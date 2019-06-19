@@ -106,9 +106,12 @@ def execQuery(self, sel_code=[]):
             query += "code = '" + sel_cur + "'"
             if(sel_cur != sel_code[len(sel_code)- 1]):
                 query += " or "
+            if sel_cur == 'CLTR086001':
+                break
         query += ")"
-
-    # print(query)
+    else:                   # 선택한 영역에 아무 강의가 없으면 아무것도 표시 안함
+        query = ""
+    print(query)
 
     self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
     timeslot.clear()
