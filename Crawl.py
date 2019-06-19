@@ -10,7 +10,7 @@ class Crawler:
         windowDriverPath = 'C:/Python/chromedriver'                     # 윈도우용 드라이버 경로
         chrome_option = webdriver.ChromeOptions()
         chrome_option.add_argument("--window-size=1280,720")  # 윈도우 사이즈 조절해서 모든 column 로드
-        #chrome_option.add_argument("headless")                # 창 없는 크롬 모드
+        chrome_option.add_argument("headless")                # 창 없는 크롬 모드
         if(platform.system() == 'Windows'): #platform
             self.driver = webdriver.Chrome(windowDriverPath, options=chrome_option)  # 윈도우 크롬 드라이버 불러오기
         else:

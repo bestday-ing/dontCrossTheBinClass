@@ -108,7 +108,7 @@ def execQuery(self, sel_code=[]):
                 query += " or "
         query += ")"
 
-    print(query)
+    # print(query)
 
     self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
     timeslot.clear()
@@ -582,7 +582,8 @@ class Ui_Dialog(QMainWindow):
             print(self.profile)
             self.NeedLoginLabel.setText(self.profile['sname'] + '님 환영합니다')
             self.LoginButton.hide()
-            self.update_credit()
+            if self.profile != -1:
+                self.update_credit()
 
     def update_credit(self):
         # sname : sdept : smajor : total : major : base : fill_lib : lib
@@ -635,7 +636,8 @@ class Ui_Dialog(QMainWindow):
                 self.add_Credit[2] -= i[1]
             else:
                 self.add_Credit[3] -= i[1]
-            self.update_credit()
+            if self.profile != -1:
+                self.update_credit()
             break
 
     def get_doubleclicked_pos(self,row,col):        # 시간표 테이블 영역을 더블클릭 할 시,
@@ -710,7 +712,8 @@ class Ui_Dialog(QMainWindow):
                         self.add_Credit[2] += i[1]
                     else:
                         self.add_Credit[3] += i[1]
-                    self.update_credit()
+                    if self.profile != -1:
+                        self.update_credit()
                     break
             colorcount = (colorcount + 1) % len(colorList)
 
