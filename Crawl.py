@@ -10,7 +10,7 @@ class Crawler:
         windowDriverPath = 'C:/Python/chromedriver'                     # 윈도우용 드라이버 경로
         chrome_option = webdriver.ChromeOptions()
         chrome_option.add_argument("--window-size=1280,720")  # 윈도우 사이즈 조절해서 모든 column 로드
-        chrome_option.add_argument("headless")                # 창 없는 크롬 모드
+        # chrome_option.add_argument("headless")                # 창 없는 크롬 모드
         if(platform.system() == 'Windows'): #platform
             self.driver = webdriver.Chrome(windowDriverPath, options=chrome_option)  # 윈도우 크롬 드라이버 불러오기
         else:
@@ -44,8 +44,13 @@ class Crawler:
 
             self.driver.get('http://my.knu.ac.kr/stpo/stpo/scor/certRecEnq/list.action')
             status = self.driver.find_element_by_id("listCertRecStatses")
+            status = status.find_element_by_tag_name("tbody")
             status = status.find_elements_by_tag_name("tr")
-            status = status[11]
+            for i in range(20):                 # 수강학기에 따라서 총 학점 찾기
+                if status[i].find_element_by_class_name('yr_trm').text == "합계":
+                    status = status[i]
+                    break
+
             profile['total'] = status.find_element_by_class_name('total').text
             profile['major'] = status.find_element_by_class_name('col51').text
             profile['base'] = status.find_element_by_class_name('col52').text

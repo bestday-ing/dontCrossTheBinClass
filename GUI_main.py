@@ -659,7 +659,7 @@ class Ui_Dialog(QMainWindow):
             #reply = QMessageBox.information(self, 'Message', "INDEX\n"+"row - "+str(row)+"\ncolumn - "+str(col), QMessageBox.Yes, QMessageBox.Yes)
             #print(reply)
 
-    def doubleclickList(self): #subjectlist 더블클릭 했을시
+    def doubleclickList(self): # subjectlist 더블클릭 했을때 테이블에 강의 추가하기
         colorList = [
             [[255, 69, 0], [0, 0, 0]],  # orange
             [[255, 218, 185], [0, 0, 0]],  # sal sak
@@ -676,6 +676,13 @@ class Ui_Dialog(QMainWindow):
         currentdata = self.Subjectlist.currentIndex().data()
         datalist = currentdata.split("\n")      # 과목코드: datalist[0] | 과목명: datalist[1]
         reply = QMessageBox.information(self, '과목추가', currentdata+" 을(를) 추가하시겠습니까?", QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+        same_name = False
+        # 이미 같은 이름 강의가 있는지 확인
+        for col in range(7):
+            for row in range(27):
+                if(table_map[row][col] == datalist[1]):
+                    same_name = True
+
         if reply == 16384:
             # print("YES클릭")
             credit_flag = True
@@ -691,6 +698,10 @@ class Ui_Dialog(QMainWindow):
                 row = (t_cur - col) / 7
                 if(table_map[int(row)][int(col)] != 0):         # 해당 테이블에 이미 강좌가 들어있다면 경고메세지 출력
                     QMessageBox.warning(self,'앗!','이미 해당시간에\n강좌가 있습니다.',QMessageBox.Yes)
+                    credit_flag = False
+                    break
+                elif same_name:
+                    QMessageBox.warning(self, '앗!', '해당 강좌가 이미\n시간표에 있습니다.', QMessageBox.Yes)
                     credit_flag = False
                     break
                 else:                                           # 테이블에 강좌가 들어있지 않다면 안에 넣기
