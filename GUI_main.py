@@ -14,6 +14,7 @@ searchClickFlag = False
 colorcount = 0
 timeslot = QtGui.QStandardItemModel()
 table_map = [[0 for col in range(7)] for row in range(27)]
+init = True
 
 def execQuery(self, sel_code=[]):
     global creditCstate
@@ -21,6 +22,7 @@ def execQuery(self, sel_code=[]):
     global typeCstate
     global query
     global searchClickFlag
+    global init
 
     gradeName = ["'*'", "'1'", "'2'", "'3'", "'4'"]
     typeName = ["'공학전공'", "'전공기반'", "'기본소양'"]
@@ -109,9 +111,8 @@ def execQuery(self, sel_code=[]):
             if sel_cur == 'CLTR086001':
                 break
         query += ")"
-    else:                   # 선택한 영역에 아무 강의가 없으면 아무것도 표시 안함
-        query = ""
-    print(query)
+
+    # print(query)
 
     self.Subjectlist.setModel(timeslot)  # 입력받은 데이터값 출력부
     timeslot.clear()
@@ -658,7 +659,13 @@ class Ui_Dialog(QMainWindow):
             for i in DataBase.DB.execute(index_query):
                 codes.append(i[0])        # codes: 해당 시간에 있는 과목코드들 배열
             # print(codes)
-            execQuery(self, codes)      # 해당 시간에 있는 과목코드들을 인자로 넘겨줌
+            if len(codes):
+                execQuery(self, codes)      # 해당 시간에 있는 과목코드들을 인자로 넘겨줌
+            else:                       # 눌렀는데 해당 시간에 아무 강의가 없으면
+                self.Subjectlist.setModel(timeslot)
+                timeslot.clear()
+                dataframe = "해당하는 강의가\n아무것도 없습니다"  # 화면 오른쪽에 강의 목록 띄우기
+                timeslot.appendRow(QtGui.QStandardItem(dataframe))
             #reply = QMessageBox.information(self, 'Message', "INDEX\n"+"row - "+str(row)+"\ncolumn - "+str(col), QMessageBox.Yes, QMessageBox.Yes)
             #print(reply)
 
